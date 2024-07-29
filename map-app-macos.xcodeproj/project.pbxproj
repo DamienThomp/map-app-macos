@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		38257ECD2C4EB84B00D3256F /* map_app_macosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257ECC2C4EB84B00D3256F /* map_app_macosApp.swift */; };
-		38257ECF2C4EB84B00D3256F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257ECE2C4EB84B00D3256F /* ContentView.swift */; };
 		38257ED12C4EB84C00D3256F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38257ED02C4EB84C00D3256F /* Assets.xcassets */; };
 		38257ED42C4EB84C00D3256F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38257ED32C4EB84C00D3256F /* Preview Assets.xcassets */; };
 		38257EDD2C4EB89B00D3256F /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257EDC2C4EB89B00D3256F /* HomeScreen.swift */; };
@@ -23,7 +22,6 @@
 /* Begin PBXFileReference section */
 		38257EC92C4EB84B00D3256F /* map-app-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "map-app-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		38257ECC2C4EB84B00D3256F /* map_app_macosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = map_app_macosApp.swift; sourceTree = "<group>"; };
-		38257ECE2C4EB84B00D3256F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		38257ED02C4EB84C00D3256F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		38257ED32C4EB84C00D3256F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		38257ED52C4EB84C00D3256F /* map_app_macos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = map_app_macos.entitlements; sourceTree = "<group>"; };
@@ -72,7 +70,6 @@
 				38257EDE2C4EB93400D3256F /* Views */,
 				38257EDB2C4EB88C00D3256F /* Screens */,
 				38257ECC2C4EB84B00D3256F /* map_app_macosApp.swift */,
-				38257ECE2C4EB84B00D3256F /* ContentView.swift */,
 				38257ED02C4EB84C00D3256F /* Assets.xcassets */,
 				38257ED52C4EB84C00D3256F /* map_app_macos.entitlements */,
 				38257ED22C4EB84C00D3256F /* Preview Content */,
@@ -202,7 +199,6 @@
 			files = (
 				38257EE72C4EC97500D3256F /* SearchResultsList.swift in Sources */,
 				38257EED2C4ED30A00D3256F /* PlaceAnnotation.swift in Sources */,
-				38257ECF2C4EB84B00D3256F /* ContentView.swift in Sources */,
 				38257ECD2C4EB84B00D3256F /* map_app_macosApp.swift in Sources */,
 				38257EEA2C4ECB3400D3256F /* SearchResultsViewModel.swift in Sources */,
 				38257EE52C4EBC5500D3256F /* LocationManager.swift in Sources */,

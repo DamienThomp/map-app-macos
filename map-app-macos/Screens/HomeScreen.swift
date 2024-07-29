@@ -21,7 +21,6 @@ struct HomeScreen: View {
             MapDetail(searchResults: $searchResults)
         }
         .environment(locationManger)
-
     }
 }
 

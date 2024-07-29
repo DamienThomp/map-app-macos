@@ -16,6 +16,7 @@ class LocationManager: NSObject {
     let manager = CLLocationManager()
     var location: CLLocation?
     var region: MKCoordinateRegion = MKCoordinateRegion()
+    var visibleRegion: MKCoordinateRegion = MKCoordinateRegion()
 
     override init() {
         super.init()

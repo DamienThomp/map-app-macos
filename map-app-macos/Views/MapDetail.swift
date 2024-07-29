@@ -24,6 +24,8 @@ struct MapDetail: View {
                     Marker(mapItem.title ?? "", coordinate: mapItem.coordinate)
                 }
                 UserAnnotation()
+            }.onMapCameraChange { context in
+                locationManager.visibleRegion = context.region
             }
         }
     }

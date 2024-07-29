@@ -16,13 +16,12 @@ struct SideBar: View {
 
     @Binding var searchResults: [PlaceAnnotation]
 
-
     private func search() {
         Task {
             do {
                 searchResults = try await viewModel.performSearch(
                     with: searchText,
-                    for: locationManger.region
+                    for: locationManger.visibleRegion
                 )
             } catch {
                 print(error.localizedDescription)

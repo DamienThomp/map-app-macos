@@ -11,6 +11,13 @@
 		38257ECF2C4EB84B00D3256F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257ECE2C4EB84B00D3256F /* ContentView.swift */; };
 		38257ED12C4EB84C00D3256F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38257ED02C4EB84C00D3256F /* Assets.xcassets */; };
 		38257ED42C4EB84C00D3256F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38257ED32C4EB84C00D3256F /* Preview Assets.xcassets */; };
+		38257EDD2C4EB89B00D3256F /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257EDC2C4EB89B00D3256F /* HomeScreen.swift */; };
+		38257EE02C4EB94100D3256F /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257EDF2C4EB94100D3256F /* SideBar.swift */; };
+		38257EE22C4EB95200D3256F /* MapDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257EE12C4EB95200D3256F /* MapDetail.swift */; };
+		38257EE52C4EBC5500D3256F /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257EE42C4EBC5500D3256F /* LocationManager.swift */; };
+		38257EE72C4EC97500D3256F /* SearchResultsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257EE62C4EC97500D3256F /* SearchResultsList.swift */; };
+		38257EEA2C4ECB3400D3256F /* SearchResultsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257EE92C4ECB3400D3256F /* SearchResultsViewModel.swift */; };
+		38257EED2C4ED30A00D3256F /* PlaceAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257EEC2C4ED30A00D3256F /* PlaceAnnotation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +27,13 @@
 		38257ED02C4EB84C00D3256F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		38257ED32C4EB84C00D3256F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		38257ED52C4EB84C00D3256F /* map_app_macos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = map_app_macos.entitlements; sourceTree = "<group>"; };
+		38257EDC2C4EB89B00D3256F /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
+		38257EDF2C4EB94100D3256F /* SideBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBar.swift; sourceTree = "<group>"; };
+		38257EE12C4EB95200D3256F /* MapDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDetail.swift; sourceTree = "<group>"; };
+		38257EE42C4EBC5500D3256F /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		38257EE62C4EC97500D3256F /* SearchResultsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsList.swift; sourceTree = "<group>"; };
+		38257EE92C4ECB3400D3256F /* SearchResultsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewModel.swift; sourceTree = "<group>"; };
+		38257EEC2C4ED30A00D3256F /* PlaceAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceAnnotation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +66,11 @@
 		38257ECB2C4EB84B00D3256F /* map-app-macos */ = {
 			isa = PBXGroup;
 			children = (
+				38257EEB2C4ED2F500D3256F /* Annotations */,
+				38257EE82C4ECB1D00D3256F /* View Models */,
+				38257EE32C4EBC4400D3256F /* Managers */,
+				38257EDE2C4EB93400D3256F /* Views */,
+				38257EDB2C4EB88C00D3256F /* Screens */,
 				38257ECC2C4EB84B00D3256F /* map_app_macosApp.swift */,
 				38257ECE2C4EB84B00D3256F /* ContentView.swift */,
 				38257ED02C4EB84C00D3256F /* Assets.xcassets */,
@@ -67,6 +86,48 @@
 				38257ED32C4EB84C00D3256F /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		38257EDB2C4EB88C00D3256F /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				38257EDC2C4EB89B00D3256F /* HomeScreen.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		38257EDE2C4EB93400D3256F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				38257EDF2C4EB94100D3256F /* SideBar.swift */,
+				38257EE12C4EB95200D3256F /* MapDetail.swift */,
+				38257EE62C4EC97500D3256F /* SearchResultsList.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		38257EE32C4EBC4400D3256F /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				38257EE42C4EBC5500D3256F /* LocationManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		38257EE82C4ECB1D00D3256F /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				38257EE92C4ECB3400D3256F /* SearchResultsViewModel.swift */,
+			);
+			path = "View Models";
+			sourceTree = "<group>";
+		};
+		38257EEB2C4ED2F500D3256F /* Annotations */ = {
+			isa = PBXGroup;
+			children = (
+				38257EEC2C4ED30A00D3256F /* PlaceAnnotation.swift */,
+			);
+			path = Annotations;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,8 +200,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38257EE72C4EC97500D3256F /* SearchResultsList.swift in Sources */,
+				38257EED2C4ED30A00D3256F /* PlaceAnnotation.swift in Sources */,
 				38257ECF2C4EB84B00D3256F /* ContentView.swift in Sources */,
 				38257ECD2C4EB84B00D3256F /* map_app_macosApp.swift in Sources */,
+				38257EEA2C4ECB3400D3256F /* SearchResultsViewModel.swift in Sources */,
+				38257EE52C4EBC5500D3256F /* LocationManager.swift in Sources */,
+				38257EE02C4EB94100D3256F /* SideBar.swift in Sources */,
+				38257EDD2C4EB89B00D3256F /* HomeScreen.swift in Sources */,
+				38257EE22C4EB95200D3256F /* MapDetail.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +348,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This application needs your location to work.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs to know your location";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -307,6 +377,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This application needs your location to work.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs to know your location";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

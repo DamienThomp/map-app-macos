@@ -11,19 +11,22 @@ import MapKit
 struct SearchResultsList: View {
 
     @Environment(LocationManager.self) private var locationManger
-
-    let searchResult: [PlaceAnnotation]
+    @Environment(SearchResultsViewModel.self) private var searchResultsViewModel
 
     var body: some View {
         List {
-            Section("Locations") {
-                ForEach(searchResult, id: \.id) { item in
-                    VStack(alignment: .leading) {
-                        Text(item.title ?? "")
-                        if let distance = item.getDistance(userLocation: locationManger.location) {
-                            Text(distance, format: .measurement(width: .abbreviated))
-                                .foregroundStyle(.cyan)
-                                .opacity(0.4)
+            if !searchResultsViewModel.searchResults.isEmpty {
+                Section("Locations") {
+                    ForEach(searchResultsViewModel.searchResults, id: \.id) { item in
+                        VStack(alignment: .leading) {
+                            Text(item.title ?? "")
+                            if let distance = item.getDistance(userLocation: locationManger.location) {
+                                Text(distance, format: .measurement(width: .abbreviated))
+                                    .foregroundStyle(.cyan)
+                                    .opacity(0.4)
+                            }
+                        }.onTapGesture {
+                            searchResultsViewModel.selectedMapItem = item
                         }
                     }
                 }
@@ -33,5 +36,5 @@ struct SearchResultsList: View {
 }
 
 #Preview {
-    SearchResultsList(searchResult: []).environment(LocationManager())
+    SearchResultsList().environment(LocationManager())
 }

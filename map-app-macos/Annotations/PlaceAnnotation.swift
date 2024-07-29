@@ -43,6 +43,14 @@ class PlaceAnnotation: NSObject, MKAnnotation, Identifiable {
         mapItem.placemark
     }
 
+    var url: URL? {
+        mapItem.url
+    }
+
+    var phoneNumber: String? {
+        mapItem.phoneNumber
+    }
+
     func getDistance(userLocation: CLLocation?) -> Measurement<UnitLength>? {
 
         guard let placeLocation = mapItem.placemark.location,

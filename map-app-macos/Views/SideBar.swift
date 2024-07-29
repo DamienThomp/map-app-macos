@@ -10,29 +10,26 @@ import SwiftUI
 struct SideBar: View {
 
     @Environment(LocationManager.self) private var locationManger
+    @Environment(SearchResultsViewModel.self) private var searchResultsViewModel
 
     @State private var searchText: String = ""
-    @State private var viewModel = SearchResultsViewModel()
-
-    @Binding var searchResults: [PlaceAnnotation]
 
     private func search() {
         Task {
             do {
-                searchResults = try await viewModel.performSearch(
+                try await searchResultsViewModel.performSearch(
                     with: searchText,
                     for: locationManger.visibleRegion
                 )
             } catch {
                 print(error.localizedDescription)
-                searchResults = []
             }
         }
     }
 
     var body: some View {
         VStack {
-            SearchResultsList(searchResult: searchResults)
+            SearchResultsList()
         }
         .searchable(
             text: $searchText,
@@ -41,7 +38,7 @@ struct SideBar: View {
         )
         .onChange(of: searchText) {
             if searchText.isEmpty {
-                searchResults = []
+                searchResultsViewModel.searchResults = []
             } else {
                 search()
             }
@@ -50,6 +47,7 @@ struct SideBar: View {
 }
 
 #Preview {
-    SideBar(searchResults: .constant([]))
+    SideBar()
         .environment(LocationManager())
+        .environment(SearchResultsViewModel())
 }

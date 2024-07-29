@@ -17,6 +17,8 @@
 		38257EE72C4EC97500D3256F /* SearchResultsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257EE62C4EC97500D3256F /* SearchResultsList.swift */; };
 		38257EEA2C4ECB3400D3256F /* SearchResultsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257EE92C4ECB3400D3256F /* SearchResultsViewModel.swift */; };
 		38257EED2C4ED30A00D3256F /* PlaceAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38257EEC2C4ED30A00D3256F /* PlaceAnnotation.swift */; };
+		38433C2D2C582DD0009EE906 /* MarkerPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38433C2C2C582DD0009EE906 /* MarkerPopoverView.swift */; };
+		38433C2F2C58352C009EE906 /* MarkerImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38433C2E2C58352C009EE906 /* MarkerImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		38257EE62C4EC97500D3256F /* SearchResultsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsList.swift; sourceTree = "<group>"; };
 		38257EE92C4ECB3400D3256F /* SearchResultsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewModel.swift; sourceTree = "<group>"; };
 		38257EEC2C4ED30A00D3256F /* PlaceAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceAnnotation.swift; sourceTree = "<group>"; };
+		38433C2C2C582DD0009EE906 /* MarkerPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerPopoverView.swift; sourceTree = "<group>"; };
+		38433C2E2C58352C009EE906 /* MarkerImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +103,8 @@
 				38257EDF2C4EB94100D3256F /* SideBar.swift */,
 				38257EE12C4EB95200D3256F /* MapDetail.swift */,
 				38257EE62C4EC97500D3256F /* SearchResultsList.swift */,
+				38433C2C2C582DD0009EE906 /* MarkerPopoverView.swift */,
+				38433C2E2C58352C009EE906 /* MarkerImageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -199,7 +205,9 @@
 			files = (
 				38257EE72C4EC97500D3256F /* SearchResultsList.swift in Sources */,
 				38257EED2C4ED30A00D3256F /* PlaceAnnotation.swift in Sources */,
+				38433C2F2C58352C009EE906 /* MarkerImageView.swift in Sources */,
 				38257ECD2C4EB84B00D3256F /* map_app_macosApp.swift in Sources */,
+				38433C2D2C582DD0009EE906 /* MarkerPopoverView.swift in Sources */,
 				38257EEA2C4ECB3400D3256F /* SearchResultsViewModel.swift in Sources */,
 				38257EE52C4EBC5500D3256F /* LocationManager.swift in Sources */,
 				38257EE02C4EB94100D3256F /* SideBar.swift in Sources */,

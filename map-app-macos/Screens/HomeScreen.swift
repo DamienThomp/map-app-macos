@@ -9,18 +9,19 @@ import SwiftUI
 
 struct HomeScreen: View {
 
-    @State private var searchResults: [PlaceAnnotation] = []
-
+    let searchResultsViewModel = SearchResultsViewModel()
     let locationManger = LocationManager()
 
     var body: some View {
         NavigationSplitView {
-            SideBar(searchResults: $searchResults)
+            SideBar()
                 .frame(minWidth: 300)
         } detail: {
-            MapDetail(searchResults: $searchResults)
+            MapDetail()
         }
         .environment(locationManger)
+        .environment(searchResultsViewModel)
+
     }
 }
 

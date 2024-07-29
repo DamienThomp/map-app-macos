@@ -5,7 +5,7 @@
 //  Created by Damien L Thompson on 2024-07-22.
 //
 
-import Foundation
+import SwiftUI
 import CoreLocation
 import Observation
 import MapKit
@@ -15,6 +15,7 @@ class LocationManager: NSObject {
 
     let manager = CLLocationManager()
     var location: CLLocation?
+    var position: MapCameraPosition = .userLocation(fallback: .automatic)
     var region: MKCoordinateRegion = MKCoordinateRegion()
     var visibleRegion: MKCoordinateRegion = MKCoordinateRegion()
 
@@ -53,11 +54,9 @@ extension LocationManager: CLLocationManagerDelegate {
             location = currentLocation
             region = MKCoordinateRegion(
                 center: currentLocation.coordinate,
-                span: MKCoordinateSpan(
-                    latitudeDelta: 0.02,
-                    longitudeDelta: 0.02
-                )
+                latitudinalMeters: 500, longitudinalMeters: 500
             )
+            position = .region(region)
         }
     }
 

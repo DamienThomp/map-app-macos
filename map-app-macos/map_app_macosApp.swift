@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct map_app_macosApp: App {
+
     var body: some Scene {
         WindowGroup {
             HomeScreen()

@@ -11,43 +11,66 @@ import MapKit
 struct MapDetail: View {
     
     @Environment(LocationManager.self) private var locationManager
-    
-    @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
-    @State private var selectedMapItem: PlaceAnnotation?
+    @Environment(SearchResultsViewModel.self) private var searchResultsViewModel
 
-    @Binding var searchResults: [PlaceAnnotation]
+    private func updateScene(with mapItem: PlaceAnnotation?) {
+        Task {
+            do {
+                guard let mapItem else { return }
+                try await searchResultsViewModel.getScene(with: mapItem)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
 
     var body: some View {
+
+        @Bindable var viewModel = searchResultsViewModel
+        @Bindable var location = locationManager
+
         ZStack {
-            Map(
-                position: $position,
-                interactionModes: .all,
-                selection: $selectedMapItem
-            ) {
+            GeometryReader { geometry in
+                Map(
+                    position: $location.position,
+                    interactionModes: .all,
+                    selection: $viewModel.selectedMapItem
+                ) {
 
-                ForEach(searchResults, id: \.id) { mapItem in
-                    Marker(
-                        mapItem.title ?? "",
-                        coordinate: mapItem.coordinate
-                    ).tag(mapItem)
+                    ForEach(searchResultsViewModel.searchResults, id: \.id) { mapItem in
+
+                        Annotation(
+                            mapItem.title ?? "",
+                            coordinate: mapItem.coordinate
+                        ) {
+                            MarkerImageView()
+                        }
+                        .tag(mapItem)
+                    }
+
+                    UserAnnotation()
                 }
-
-                UserAnnotation()
-            }
-            .mapControls {
-                MapUserLocationButton()
-                MapCompass()
-                MapPitchSlider()
-            }
-            .onMapCameraChange { context in
-                locationManager.visibleRegion = context.region
-            }.onChange(of: selectedMapItem) {
-               print("Handle Look around preview here")
+                .mapControls {
+                    MapPitchSlider()
+                    MapUserLocationButton()
+                    MapCompass()
+                }
+                .onMapCameraChange { context in
+                    locationManager.visibleRegion = context.region
+                }
+                .onChange(of: viewModel.selectedMapItem) {
+                    if let selectedMapItem = viewModel.selectedMapItem {
+                        location.position = .region(viewModel.updateRegion(with: selectedMapItem))
+                        updateScene(with: selectedMapItem)
+                    }
+                }
             }
         }
     }
 }
 
 #Preview {
-    MapDetail(searchResults: .constant([])).environment(LocationManager())
+    MapDetail()
+        .environment(LocationManager())
+        .environment(SearchResultsViewModel())
 }

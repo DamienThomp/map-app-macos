@@ -13,19 +13,36 @@ struct MapDetail: View {
     @Environment(LocationManager.self) private var locationManager
     
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
-    @State private var selectedMapItem: MKMapItem?
+    @State private var selectedMapItem: PlaceAnnotation?
 
     @Binding var searchResults: [PlaceAnnotation]
 
     var body: some View {
         ZStack {
-            Map(position: $position, selection: $selectedMapItem) {
+            Map(
+                position: $position,
+                interactionModes: .all,
+                selection: $selectedMapItem
+            ) {
+
                 ForEach(searchResults, id: \.id) { mapItem in
-                    Marker(mapItem.title ?? "", coordinate: mapItem.coordinate)
+                    Marker(
+                        mapItem.title ?? "",
+                        coordinate: mapItem.coordinate
+                    ).tag(mapItem)
                 }
+
                 UserAnnotation()
-            }.onMapCameraChange { context in
+            }
+            .mapControls {
+                MapUserLocationButton()
+                MapCompass()
+                MapPitchSlider()
+            }
+            .onMapCameraChange { context in
                 locationManager.visibleRegion = context.region
+            }.onChange(of: selectedMapItem) {
+               print("Handle Look around preview here")
             }
         }
     }

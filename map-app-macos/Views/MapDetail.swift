@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct MapDetail: View {
-    
+
     @Environment(LocationManager.self) private var locationManager
     @Environment(SearchResultsViewModel.self) private var searchResultsViewModel
 
@@ -30,39 +30,37 @@ struct MapDetail: View {
         @Bindable var location = locationManager
 
         ZStack {
-            GeometryReader { geometry in
-                Map(
-                    position: $location.position,
-                    interactionModes: .all,
-                    selection: $viewModel.selectedMapItem
-                ) {
+            Map(
+                position: $location.position,
+                interactionModes: .all,
+                selection: $viewModel.selectedMapItem
+            ) {
 
-                    ForEach(searchResultsViewModel.searchResults, id: \.id) { mapItem in
+                ForEach(searchResultsViewModel.searchResults, id: \.id) { mapItem in
 
-                        Annotation(
-                            mapItem.title ?? "",
-                            coordinate: mapItem.coordinate
-                        ) {
-                            MarkerImageView()
-                        }
-                        .tag(mapItem)
+                    Annotation(
+                        mapItem.title ?? "",
+                        coordinate: mapItem.coordinate
+                    ) {
+                        MarkerImageView()
                     }
+                    .tag(mapItem)
+                }
 
-                    UserAnnotation()
-                }
-                .mapControls {
-                    MapPitchSlider()
-                    MapUserLocationButton()
-                    MapCompass()
-                }
-                .onMapCameraChange { context in
-                    locationManager.visibleRegion = context.region
-                }
-                .onChange(of: viewModel.selectedMapItem) {
-                    if let selectedMapItem = viewModel.selectedMapItem {
-                        location.position = .region(viewModel.updateRegion(with: selectedMapItem))
-                        updateScene(with: selectedMapItem)
-                    }
+                UserAnnotation()
+            }
+            .mapControls {
+                MapPitchSlider()
+                MapUserLocationButton()
+                MapCompass()
+            }
+            .onMapCameraChange { context in
+                locationManager.visibleRegion = context.region
+            }
+            .onChange(of: viewModel.selectedMapItem) {
+                if let selectedMapItem = viewModel.selectedMapItem {
+                    location.position = .region(viewModel.updateRegion(with: selectedMapItem))
+                    updateScene(with: selectedMapItem)
                 }
             }
         }

@@ -13,25 +13,31 @@ struct SearchResultsList: View {
     @Environment(LocationManager.self) private var locationManger
     @Environment(SearchResultsViewModel.self) private var searchResultsViewModel
 
+    @State private var selection: UUID?
+
     var body: some View {
-        List {
+
+        List(selection: $selection) {
             if !searchResultsViewModel.searchResults.isEmpty {
                 Section("Locations") {
                     ForEach(searchResultsViewModel.searchResults, id: \.id) { item in
-                        VStack(alignment: .leading) {
-                            Text(item.title ?? "")
-                            if let distance = item.getDistance(userLocation: locationManger.location) {
-                                Text(distance, format: .measurement(width: .abbreviated))
-                                    .foregroundStyle(.cyan)
-                                    .opacity(0.4)
-                            }
-                        }.onTapGesture {
-                            searchResultsViewModel.selectedMapItem = item
-                        }
+                        SearchListCellView(
+                            mapItem: item,
+                            userLocation: locationManger.location
+                        )
                     }
                 }
             }
-        }.listStyle(.sidebar)
+        }
+        .onChange(of: selection) {
+            searchResultsViewModel.selectedMapItem = searchResultsViewModel.searchResults.first(where: { $0.id == selection })
+        }
+        .onChange(of: searchResultsViewModel.selectedMapItem) {
+            if let selectedMapItem = searchResultsViewModel.selectedMapItem {
+                selection = selectedMapItem.id
+            }
+        }
+        .listStyle(.sidebar)
     }
 }
 

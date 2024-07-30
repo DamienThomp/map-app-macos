@@ -13,8 +13,10 @@ Demo project using SwiftUI to generate a macOS application with MapKit and Corel
 
 - Settings for units (metric or imperial)
 - Settings for Dark and Light mode
+- Add more details/actions to Map Marker popovers
 - Directions from current location to selected marker
 - Add map controls to toolbar
+- Filter sidebar list items by distance from current location
 
 ## Screenshot
 

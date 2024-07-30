@@ -10,6 +10,9 @@ import SwiftUI
 struct MarkerImageView: View {
 
     @State private var showPopover: Bool = false
+    @Binding var selectedItem: PlaceAnnotation?
+
+    let mapItem: PlaceAnnotation
 
     var body: some View {
 
@@ -18,15 +21,15 @@ struct MarkerImageView: View {
             .scaledToFit()
             .frame(width: 30, height: 30)
             .foregroundStyle(.black, .pink)
-            .onTapGesture {
-                showPopover = true
+            .onChange(of: selectedItem) {
+                if selectedItem?.id == mapItem.id {
+                    withAnimation(.easeInOut) {
+                        showPopover = true
+                    }
+                }
             }
             .popover(isPresented: $showPopover) {
                 MarkerPopoverView()
             }
     }
-}
-
-#Preview {
-    MarkerImageView()
 }

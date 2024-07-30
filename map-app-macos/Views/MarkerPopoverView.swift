@@ -11,11 +11,13 @@ import MapKit
 struct MarkerPopoverView: View {
 
     @Environment(SearchResultsViewModel.self) var searchResultsViewModel
-
+    
+    @MainActor
     private var url: String? {
         searchResultsViewModel.selectedMapItem?.url?.absoluteString
     }
 
+    @MainActor
     private var phoneNumber: String? {
         searchResultsViewModel.selectedMapItem?.phoneNumber
     }

@@ -15,6 +15,8 @@ struct SearchResultsList: View {
 
     @State private var selection: UUID?
 
+    private var task: Task<(), Never>?
+
     var body: some View {
 
         List(selection: $selection) {
@@ -24,18 +26,19 @@ struct SearchResultsList: View {
                         SearchListCellView(
                             mapItem: item,
                             userLocation: locationManger.location
-                        )
+                        ).onTapGesture {
+                            // TODO: find a better solution to reseting selection value
+                            selection = nil
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                selection = item.id
+                            }
+                        }
                     }
                 }
             }
         }
         .onChange(of: selection) {
-            searchResultsViewModel.selectedMapItem = searchResultsViewModel.searchResults.first(where: { $0.id == selection })
-        }
-        .onChange(of: searchResultsViewModel.selectedMapItem) {
-            if let selectedMapItem = searchResultsViewModel.selectedMapItem {
-                selection = selectedMapItem.id
-            }
+            searchResultsViewModel.updateSelectedItem(with: selection)
         }
         .listStyle(.sidebar)
     }

@@ -14,7 +14,7 @@ class SearchResultsViewModel {
 
     @MainActor var searchResults = [PlaceAnnotation]()
     @MainActor var scene: MKLookAroundScene?
-    var selectedMapItem: PlaceAnnotation?
+    @MainActor var selectedMapItem: PlaceAnnotation? = nil
 
     private var locationManger = LocationManager()
 
@@ -37,7 +37,7 @@ class SearchResultsViewModel {
 
     @MainActor 
     func getScene(with mapItem: PlaceAnnotation) async throws {
-
+        // TODO: add cache to avoid rate limit error
         scene = nil
 
         let request = MKLookAroundSceneRequest(coordinate: mapItem.coordinate)
@@ -47,5 +47,19 @@ class SearchResultsViewModel {
 
     func updateRegion(with mapItem: PlaceAnnotation) -> MKCoordinateRegion {
         return MKCoordinateRegion(center: mapItem.coordinate, latitudinalMeters: 250, longitudinalMeters: 250)
+    }
+
+    @MainActor 
+    func updateSelectedItem(with id: UUID?) {
+        
+        selectedMapItem = nil
+
+        guard let id,
+              let mapItem = searchResults.first(where: { $0.id == id })
+        else {
+            return
+        }
+        
+        selectedMapItem = mapItem
     }
 }

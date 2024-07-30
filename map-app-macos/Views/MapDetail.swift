@@ -42,7 +42,7 @@ struct MapDetail: View {
                         mapItem.title ?? "",
                         coordinate: mapItem.coordinate
                     ) {
-                        MarkerImageView()
+                        MarkerImageView(selectedItem: $viewModel.selectedMapItem, mapItem: mapItem)
                     }
                     .tag(mapItem)
                 }
@@ -59,8 +59,8 @@ struct MapDetail: View {
             }
             .onChange(of: viewModel.selectedMapItem) {
                 if let selectedMapItem = viewModel.selectedMapItem {
-                    location.position = .region(viewModel.updateRegion(with: selectedMapItem))
                     updateScene(with: selectedMapItem)
+                    location.position = .region(viewModel.updateRegion(with: selectedMapItem))
                 }
             }
         }

@@ -7,10 +7,16 @@ Demo project using SwiftUI to generate a macOS application with MapKit and Corel
 - Local search for locations
 - Display of locations as markers on map
 - Display of users current location
+- Look around popover view for Map Markers
 
 ## Future Improvements
 
-- Lookaround popover view for location markers
 - Settings for units (metric or imperial)
 - Settings for Dark and Light mode
 - Directions from current location to selected marker
+- Trigger popover when selecting item in sidebar (currently not working)
+
+## Screenshot
+
+<img width="800" alt="Screenshot 2024-07-29 at 7 57 40 PM" src="https://github.com/user-attachments/assets/930f12ef-2ef0-421b-8790-1196676af338">
+

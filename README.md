@@ -1,6 +1,6 @@
 # MapKit Project
 
-Demo project using SwiftUI to generate a macOS application with MapKit and Corelocation. Work in progress.
+Demo project using SwiftUI to generate a macOS application with MapKit and Corelocation. Work in progress, features will be added over time along with refactor passes to cleanup code.
 
 ## Working Features
 

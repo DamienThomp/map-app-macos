@@ -40,6 +40,14 @@ struct SearchResultsList: View {
         .onChange(of: selection) {
             searchResultsViewModel.updateSelectedItem(with: selection)
         }
+        .onChange(of: searchResultsViewModel.selectedMapItem) {
+//            guard let selectedMapItem = searchResultsViewModel.selectedMapItem,
+//                  selectedMapItem.id != selection else {
+//                return
+//            }
+//
+//            selection = selectedMapItem.id
+        }
         .listStyle(.sidebar)
     }
 }

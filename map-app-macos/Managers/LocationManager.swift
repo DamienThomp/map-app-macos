@@ -64,4 +64,3 @@ extension LocationManager: CLLocationManagerDelegate {
         print(error.localizedDescription)
     }
 }
-

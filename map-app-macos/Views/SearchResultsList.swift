@@ -15,8 +15,6 @@ struct SearchResultsList: View {
 
     @State private var selection: UUID?
 
-    private var task: Task<(), Never>?
-
     var body: some View {
 
         List(selection: $selection) {

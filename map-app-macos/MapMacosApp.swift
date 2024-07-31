@@ -1,5 +1,5 @@
 //
-//  map_app_macosApp.swift
+//  MapMacosApp.swift
 //  map-app-macos
 //
 //  Created by Damien L Thompson on 2024-07-22.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct map_app_macosApp: App {
+struct MapMacosApp: App {
 
     var body: some Scene {
         WindowGroup {

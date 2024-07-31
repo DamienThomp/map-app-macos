@@ -28,6 +28,7 @@ struct SideBar: View {
     }
 
     var body: some View {
+        
         VStack {
             SearchResultsList()
         }

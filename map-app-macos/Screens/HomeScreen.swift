@@ -21,7 +21,6 @@ struct HomeScreen: View {
         }
         .environment(locationManger)
         .environment(searchResultsViewModel)
-
     }
 }
 

@@ -11,10 +11,11 @@ import MapKit
 struct MarkerPopoverView: View {
 
     @Environment(SearchResultsViewModel.self) var searchResultsViewModel
-    
+    @Environment(\.openURL) var openUrl
+
     @MainActor
-    private var url: String? {
-        searchResultsViewModel.selectedMapItem?.url?.absoluteString
+    private var url: URL? {
+        searchResultsViewModel.selectedMapItem?.url
     }
 
     @MainActor
@@ -36,8 +37,11 @@ struct MarkerPopoverView: View {
                     }
 
                     if let url {
-                        Text(url)
-                            .foregroundStyle(.blue)
+                        Button {
+                            openUrl(url)
+                        } label: {
+                            Text(url.absoluteString)
+                        }.buttonStyle(.borderless)
                     }
                 }.font(.caption)
             }

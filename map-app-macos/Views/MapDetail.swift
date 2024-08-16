@@ -13,6 +13,10 @@ struct MapDetail: View {
     @Environment(LocationManager.self) private var locationManager
     @Environment(SearchResultsViewModel.self) private var searchResultsViewModel
 
+    @Namespace var mapScope
+
+    @State var mapStyle: MapStyle = .standard
+
     private func updateScene(with mapItem: PlaceAnnotation?) {
         Task {
             do {
@@ -33,7 +37,8 @@ struct MapDetail: View {
             Map(
                 position: $location.position,
                 interactionModes: .all,
-                selection: $viewModel.selectedMapItem
+                selection: $viewModel.selectedMapItem,
+                scope: mapScope
             ) {
 
                 ForEach(searchResultsViewModel.searchResults, id: \.id) { mapItem in
@@ -42,7 +47,10 @@ struct MapDetail: View {
                         mapItem.title ?? "",
                         coordinate: mapItem.coordinate
                     ) {
-                        MarkerImageView(selectedItem: $viewModel.selectedMapItem, mapItem: mapItem)
+                        MarkerImageView(
+                            selectedItem: $viewModel.selectedMapItem,
+                            mapItem: mapItem
+                        )
                     }
                     .tag(mapItem)
                 }
@@ -50,8 +58,9 @@ struct MapDetail: View {
                 UserAnnotation()
             }
             .mapControls {
+
+                MapZoomStepper()
                 MapPitchSlider()
-                MapUserLocationButton()
                 MapCompass()
             }
             .onMapCameraChange { context in
@@ -63,7 +72,34 @@ struct MapDetail: View {
                     location.position = .region(viewModel.updateRegion(with: selectedMapItem))
                 }
             }
+            .toolbar {
+
+                MapUserLocationButton(scope: mapScope)
+                    .controlSize(.large)
+
+                MapPitchToggle(scope: mapScope)
+                    .mapControlVisibility(.visible)
+                    .controlSize(.large)
+
+                Menu {
+                    Button {
+                        mapStyle = .standard
+                    } label: {
+                        Text("Standard")
+                    }
+
+                    Button {
+                        mapStyle = .hybrid
+                    } label: {
+                        Text("Hydrid")
+                    }
+                } label: {
+                    Image(systemName: "map")
+                }
+            }
+            .mapStyle(mapStyle)
         }
+        .mapScope(mapScope)
     }
 }
 

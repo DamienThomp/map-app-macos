@@ -17,8 +17,8 @@ struct SearchListCellView: View {
 
         HStack(alignment: .firstTextBaseline) {
 
-            Image(systemName: "mappin.circle.fill")
-                .foregroundStyle(.black, .pink)
+            Image(systemName: mapItem.pointOfInterestIcon)
+                .foregroundStyle(.black, mapItem.pointOfInterestColor)
             Text(mapItem.title ?? "")
                 .font(.system(size: 14))
 

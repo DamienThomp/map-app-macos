@@ -16,11 +16,12 @@ struct MarkerImageView: View {
 
     var body: some View {
 
-        Image(systemName: "mappin.circle.fill")
+        Image(systemName: mapItem.pointOfInterestIcon)
             .resizable()
             .scaledToFit()
+            .scaleEffect(showPopover ? 1.8 : 1.0)
             .frame(width: 30, height: 30)
-            .foregroundStyle(.black, .pink)
+            .foregroundStyle(.black, mapItem.pointOfInterestColor)
             .onChange(of: selectedItem) {
                 if selectedItem?.id == mapItem.id {
                     withAnimation(.easeInOut) {
@@ -28,7 +29,8 @@ struct MarkerImageView: View {
                     }
                 }
             }
-            .popover(isPresented: $showPopover) {
+            .padding(12)
+            .popover(isPresented: $showPopover, arrowEdge: .leading) {
                 MarkerPopoverView()
             }
     }

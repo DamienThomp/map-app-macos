@@ -22,5 +22,5 @@ Demo project using SwiftUI to generate a macOS application with MapKit and Corel
 
 ## Screenshot
 
-<img width="800" alt="Screenshot 2024-07-29 at 7 57 40 PM" src="https://github.com/user-attachments/assets/930f12ef-2ef0-421b-8790-1196676af338">
+<img width="1501" alt="Screenshot 2024-08-15 at 8 57 54 PM" src="https://github.com/user-attachments/assets/cddecb84-0ddf-4782-a73e-de32500e4fa8">
 

@@ -23,6 +23,7 @@ struct MapDetail: View {
                 guard let mapItem else { return }
                 try await searchResultsViewModel.getScene(with: mapItem)
             } catch {
+                // TODO: handle updatescene error
                 print(error.localizedDescription)
             }
         }
@@ -67,7 +68,7 @@ struct MapDetail: View {
                 locationManager.visibleRegion = context.region
             }
             .onChange(of: viewModel.selectedMapItem) {
-                print(String(describing: viewModel.selectedMapItem))
+
                 if let selectedMapItem = viewModel.selectedMapItem {
                     
                     Task { @MainActor in
@@ -87,13 +88,21 @@ struct MapDetail: View {
 
                 Menu {
                     Button {
-                        mapStyle = .standard
+
+                        mapStyle = .standard(
+                            elevation: .flat,
+                            showsTraffic: false
+                        )
                     } label: {
                         Text("Standard")
                     }
 
                     Button {
-                        mapStyle = .hybrid
+
+                        mapStyle = .hybrid(
+                            elevation: .realistic,
+                            showsTraffic: true
+                        )
                     } label: {
                         Text("Hydrid")
                     }

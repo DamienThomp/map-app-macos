@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import MapKit
 import Contacts
 
@@ -49,6 +50,27 @@ class PlaceAnnotation: NSObject, MKAnnotation, Identifiable {
 
     var phoneNumber: String? {
         mapItem.phoneNumber
+    }
+
+    var pointOfInterestCategory: MKPointOfInterestCategory? {
+
+        guard let category = mapItem.pointOfInterestCategory else { return nil }
+
+        return category
+    }
+
+    var pointOfInterestIcon: String {
+
+        let (icon, _ ) = AnnotationHelper.getIconforAnotation(pointOfInterestCategory)
+
+        return icon
+    }
+
+    var pointOfInterestColor: Color {
+        
+        let (_, color) = AnnotationHelper.getIconforAnotation(pointOfInterestCategory)
+
+        return color
     }
 
     func getDistance(userLocation: CLLocation?) -> Measurement<UnitLength>? {

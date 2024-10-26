@@ -68,9 +68,7 @@ struct MapDetail: View {
                 locationManager.visibleRegion = context.region
             }
             .onChange(of: viewModel.selectedMapItem) {
-
                 if let selectedMapItem = viewModel.selectedMapItem {
-                    
                     Task { @MainActor in
                         updateScene(with: selectedMapItem)
                         location.position = .region(viewModel.updateRegion(with: selectedMapItem))

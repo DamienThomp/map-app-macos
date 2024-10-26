@@ -33,5 +33,6 @@ struct MarkerImageView: View {
             .popover(isPresented: $showPopover, arrowEdge: .leading) {
                 MarkerPopoverView()
             }
+            .animation(.spring(duration: 0.5, bounce: 0.75), value: showPopover)
     }
 }

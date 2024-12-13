@@ -15,12 +15,17 @@ struct MarkerPopoverView: View {
 
     @MainActor
     private var url: URL? {
-        searchResultsViewModel.selectedMapItem?.url
+       searchResultsViewModel.selectedMapItem?.url
     }
 
     @MainActor
-    private var phoneNumber: String? {
-        searchResultsViewModel.selectedMapItem?.phoneNumber
+    private var phoneNumber: URL? {
+
+        guard let phoneNumber = searchResultsViewModel.selectedMapItem?.phoneNumber else { return nil }
+
+        let formattedNumber = phoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+
+        return URL(string: "tel:\(formattedNumber)")
     }
 
     var body: some View {
@@ -33,15 +38,15 @@ struct MarkerPopoverView: View {
                 HStack(spacing: 10) {
 
                     if let phoneNumber {
-                        Text(phoneNumber)
+                        Link(destination: phoneNumber ) {
+                            Image(systemName: "phone")
+                        }.foregroundStyle(.gray)
                     }
 
                     if let url {
-                        Button {
-                            openUrl(url)
-                        } label: {
-                            Text(url.absoluteString)
-                        }.buttonStyle(.borderless)
+                        Link(destination: url ) {
+                            Image(systemName: "safari")
+                        }.foregroundStyle(.gray)
                     }
                 }.font(.caption)
             }

@@ -13,12 +13,10 @@ struct MarkerPopoverView: View {
     @Environment(SearchResultsViewModel.self) var searchResultsViewModel
     @Environment(\.openURL) var openUrl
 
-    @MainActor
     private var url: URL? {
        searchResultsViewModel.selectedMapItem?.url
     }
 
-    @MainActor
     private var phoneNumber: URL? {
 
         guard let phoneNumber = searchResultsViewModel.selectedMapItem?.phoneNumber else { return nil }

@@ -54,7 +54,7 @@ class SearchResultsViewModel {
         else {
             return
         }
-        
+
         selectedMapItem = mapItem
     }
 

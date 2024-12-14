@@ -85,9 +85,10 @@ struct MapDetail: View {
                 }
             }
             .mapControls {
-
+                #if os(macOS)
                 MapZoomStepper()
                 MapPitchSlider()
+                #endif
                 MapCompass()
             }
             .onMapCameraChange { context in

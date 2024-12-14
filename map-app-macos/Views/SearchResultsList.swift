@@ -25,7 +25,15 @@ struct SearchResultsList: View {
                             mapItem: item,
                             userLocation: locationManger.location
                         ).onTapGesture {
-                            selection = item.id
+                            Task {
+                                if selection == item.id {
+
+                                    selection = nil
+                                    try await Task.sleep(for: .seconds(0.5))
+                                }
+
+                                selection = item.id
+                            }
                         }
                     }
                 }

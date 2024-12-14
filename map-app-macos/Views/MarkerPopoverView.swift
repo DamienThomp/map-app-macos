@@ -11,10 +11,9 @@ import MapKit
 struct MarkerPopoverView: View {
 
     @Environment(SearchResultsViewModel.self) var searchResultsViewModel
-    @Environment(\.openURL) var openUrl
 
     private var url: URL? {
-       searchResultsViewModel.selectedMapItem?.url
+        searchResultsViewModel.selectedMapItem?.url
     }
 
     private var phoneNumber: URL? {
@@ -28,11 +27,9 @@ struct MarkerPopoverView: View {
 
     var body: some View {
 
-        @Bindable var viewModel = searchResultsViewModel
-        
         VStack(alignment: .leading, spacing: 10) {
             VStack(alignment: .leading) {
-                Text(viewModel.selectedMapItem?.title ?? "").font(.title2)
+                Text(searchResultsViewModel.selectedMapItem?.title ?? "").font(.title2)
                 HStack(spacing: 10) {
 
                     if let phoneNumber {
@@ -51,7 +48,7 @@ struct MarkerPopoverView: View {
                 }.font(.caption)
             }
 
-            LookAroundPreview(scene: $viewModel.scene)
+            LookAroundPreview(initialScene: searchResultsViewModel.scene)
                 .frame(height: 150)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
         }

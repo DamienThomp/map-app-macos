@@ -25,11 +25,7 @@ struct SearchResultsList: View {
                             mapItem: item,
                             userLocation: locationManger.location
                         ).onTapGesture {
-                            // TODO: find a better solution to reseting selection value
-                            selection = nil
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                                selection = item.id
-                            }
+                            selection = item.id
                         }
                     }
                 }

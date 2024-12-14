@@ -35,27 +35,30 @@ class SearchResultsViewModel {
         }
     }
 
-    @MainActor 
     func getScene(with mapItem: PlaceAnnotation) async throws {
-        // TODO: add cache to avoid rate limit error
-        scene = nil
 
         let request = MKLookAroundSceneRequest(coordinate: mapItem.coordinate)
-        scene = try await request.scene
+        let lookAroundScene = try await request.scene
+
+        Task { @MainActor in
+            scene = lookAroundScene
+        }
     }
 
-    @MainActor 
     func updateSelectedItem(with id: UUID?) {
-        
-        selectedMapItem = nil
 
-        guard let id,
-              let mapItem = searchResults.first(where: { $0.id == id })
-        else {
-            return
+        Task { @MainActor in
+
+            selectedMapItem = nil
+
+            guard let id,
+                  let mapItem = searchResults.first(where: { $0.id == id })
+            else {
+                return
+            }
+
+            selectedMapItem = mapItem
         }
-
-        selectedMapItem = mapItem
     }
 
     func updateRegion(with mapItem: PlaceAnnotation) -> MKCoordinateRegion {

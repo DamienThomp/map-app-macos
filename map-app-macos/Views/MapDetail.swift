@@ -16,6 +16,8 @@ struct MapDetail: View {
     @Namespace var mapScope
 
     @State var mapStyle: MapStyle = .standard(pointsOfInterest: .excludingAll)
+    @State var currentPitch: CGFloat = 0.0
+    @State var currentDistance: CGFloat = 1000
 
     private func updateScene(with mapItem: PlaceAnnotation?) {
         Task {
@@ -23,10 +25,13 @@ struct MapDetail: View {
                 guard let mapItem else { return }
                 try await searchResultsViewModel.getScene(with: mapItem)
             } catch {
-                // TODO: handle updatescene error
-                print(error.localizedDescription)
+                print("update scene error: \(error.localizedDescription)")
             }
         }
+    }
+
+    private func createCamera(with coordinate: CLLocationCoordinate2D, pitch: CGFloat, distance: CGFloat) -> MapCamera {
+        MapCamera(centerCoordinate: coordinate, distance: distance, pitch: currentPitch)
     }
 
     var body: some View {
@@ -50,6 +55,7 @@ struct MapDetail: View {
                     ) {
                         MarkerImageView(
                             selectedItem: $viewModel.selectedMapItem,
+                            scene: $viewModel.scene,
                             mapItem: mapItem
                         )
                     }
@@ -65,13 +71,19 @@ struct MapDetail: View {
                 MapCompass()
             }
             .onMapCameraChange { context in
+                currentPitch = context.camera.pitch
+                currentDistance = context.camera.distance
                 locationManager.visibleRegion = context.region
             }
             .onChange(of: viewModel.selectedMapItem) {
                 if let selectedMapItem = viewModel.selectedMapItem {
                     Task { @MainActor in
-                        updateScene(with: selectedMapItem)
-                        location.position = .region(viewModel.updateRegion(with: selectedMapItem))
+                        let mapCamera = createCamera(with: selectedMapItem.coordinate, pitch: currentPitch, distance: currentDistance)
+                        withAnimation {
+                            location.position = .camera(mapCamera)
+                        } completion: {
+                            updateScene(with: selectedMapItem)
+                        }
                     }
                 }
             }

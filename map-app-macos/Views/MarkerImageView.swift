@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct MarkerImageView: View {
 
     @State private var showPopover: Bool = false
     @Binding var selectedItem: PlaceAnnotation?
+    @Binding var scene: MKLookAroundScene?
 
     let mapItem: PlaceAnnotation
 
@@ -22,7 +24,7 @@ struct MarkerImageView: View {
             .scaleEffect(showPopover ? 1.8 : 1.0)
             .frame(width: 30, height: 30)
             .foregroundStyle(.black, mapItem.pointOfInterestColor)
-            .onChange(of: selectedItem) {
+            .onChange(of: scene) {
                 if selectedItem?.id == mapItem.id {
                     withAnimation(.easeInOut) {
                         showPopover = true

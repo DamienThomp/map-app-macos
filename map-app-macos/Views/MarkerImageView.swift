@@ -13,6 +13,7 @@ struct MarkerImageView: View {
     @State private var showPopover: Bool = false
     @Binding var selectedItem: PlaceAnnotation?
     @Binding var scene: MKLookAroundScene?
+    @Binding var route: [MKRoute]
 
     let mapItem: PlaceAnnotation
 
@@ -31,6 +32,9 @@ struct MarkerImageView: View {
                     }
                 }
             }
+            .onChange(of: route) {
+                showPopover = false
+            }
             .onTapGesture {
                 if selectedItem?.id == mapItem.id {
                     withAnimation(.easeInOut) {
@@ -38,6 +42,11 @@ struct MarkerImageView: View {
                     }
                 }
             }
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Gradient(colors: [.gray, .black]), lineWidth: 2)
+                    .scaleEffect(showPopover ? 1.8 : 1.0)
+            )
             .padding(12)
             .popover(isPresented: $showPopover, arrowEdge: .leading) {
                 MarkerPopoverView()

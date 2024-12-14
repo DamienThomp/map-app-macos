@@ -19,6 +19,10 @@ struct MapDetail: View {
     @State var currentPitch: CGFloat = 0.0
     @State var currentDistance: CGFloat = 1000
 
+    private var strokeStyle: StrokeStyle {
+        StrokeStyle(lineWidth: 12, lineCap: .round, lineJoin: .round, miterLimit: 10)
+    }
+
     private func updateScene(with mapItem: PlaceAnnotation?) {
         Task {
             do {
@@ -32,6 +36,16 @@ struct MapDetail: View {
 
     private func createCamera(with coordinate: CLLocationCoordinate2D, pitch: CGFloat, distance: CGFloat) -> MapCamera {
         MapCamera(centerCoordinate: coordinate, distance: distance, pitch: currentPitch)
+    }
+
+    private func getDirections() {
+        Task {
+            do {
+                try await searchResultsViewModel.getDirection()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
 
     var body: some View {
@@ -56,6 +70,7 @@ struct MapDetail: View {
                         MarkerImageView(
                             selectedItem: $viewModel.selectedMapItem,
                             scene: $viewModel.scene,
+                            route: $viewModel.routes,
                             mapItem: mapItem
                         )
                     }
@@ -63,6 +78,11 @@ struct MapDetail: View {
                 }
 
                 UserAnnotation()
+
+                ForEach(viewModel.routes, id: \.self) { element in
+                    MapPolyline(element)
+                        .stroke(Gradient(colors: [.red, .indigo]), style: strokeStyle)
+                }
             }
             .mapControls {
 
@@ -118,6 +138,16 @@ struct MapDetail: View {
                     }
                 } label: {
                     Image(systemName: "map")
+                }
+            }
+            .overlay(alignment: .topTrailing) {
+                if viewModel.routes.first != nil {
+                    DirectionControlsView()
+                }
+            }
+            .onChange(of: viewModel.transportType) {
+                if viewModel.routes.first != nil {
+                    getDirections()
                 }
             }
             .mapStyle(mapStyle)

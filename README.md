@@ -10,6 +10,8 @@ Demo project using SwiftUI to generate a macOS application with MapKit and Corel
 - Look around popover view for Map Markers
 - Map controls in toolbar: 3D/2D toggle, user location, MapStyle .standard and .hybrid selection menu
 - Scale stepper in map view
+- Directions from current location to selected marker
+- Select transport type for route car, walking or transit
 
 ## Future Improvements
 
@@ -17,7 +19,6 @@ Demo project using SwiftUI to generate a macOS application with MapKit and Corel
 - Settings for units (metric or imperial)
 - Settings for Dark and Light mode
 - Add more details/actions to Map Marker popovers
-- Directions from current location to selected marker
 - Filter sidebar list items by distance from current location
 
 ## Screenshot

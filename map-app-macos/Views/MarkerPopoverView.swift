@@ -25,12 +25,24 @@ struct MarkerPopoverView: View {
         return URL(string: "tel:\(formattedNumber)")
     }
 
+    private func getDirections() {
+        Task {
+            do {
+                try await searchResultsViewModel.getDirection()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+
     var body: some View {
 
         VStack(alignment: .leading, spacing: 10) {
             VStack(alignment: .leading) {
-                Text(searchResultsViewModel.selectedMapItem?.title ?? "").font(.title2)
+
                 HStack(spacing: 10) {
+                    
+                    Text(searchResultsViewModel.selectedMapItem?.title ?? "").font(.title2)
 
                     if let phoneNumber {
                         Link(destination: phoneNumber ) {
@@ -46,6 +58,17 @@ struct MarkerPopoverView: View {
                         }.foregroundStyle(.gray)
                     }
                 }.font(.caption)
+
+                Button {
+                    searchResultsViewModel.showingDirections = false
+                    getDirections()
+                    searchResultsViewModel.showingDirections = true
+                } label: {
+                    HStack {
+                        Text("Get Directions")
+                        Image(systemName: "arrow.trianglehead.turn.up.right.diamond")
+                    }.padding(6)
+                }.buttonStyle(.borderedProminent)
             }
 
             LookAroundPreview(initialScene: searchResultsViewModel.scene)

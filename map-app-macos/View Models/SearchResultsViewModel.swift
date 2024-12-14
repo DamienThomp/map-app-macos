@@ -15,6 +15,10 @@ class SearchResultsViewModel {
     @MainActor var searchResults = [PlaceAnnotation]()
     @MainActor var scene: MKLookAroundScene?
     @MainActor var selectedMapItem: PlaceAnnotation?
+    @MainActor var routes = [MKRoute]()
+    @MainActor var showingDirections: Bool = false
+
+    var transportType: MKDirectionsTransportType = .automobile
 
     private var locationManger = LocationManager()
 
@@ -61,7 +65,30 @@ class SearchResultsViewModel {
         }
     }
 
-    func updateRegion(with mapItem: PlaceAnnotation) -> MKCoordinateRegion {
-        return MKCoordinateRegion(center: mapItem.coordinate, latitudinalMeters: 250, longitudinalMeters: 250)
+    func getDirection() async throws {
+
+        guard let selectedMapItem = await selectedMapItem,
+            let location = locationManger.location else { return }
+
+        let startPoint = CLLocationCoordinate2D(
+            latitude: location.coordinate.latitude,
+            longitude: location.coordinate.longitude
+        )
+
+        let request = MKDirections.Request()
+        request.source = MKMapItem(placemark: MKPlacemark(coordinate: startPoint))
+        request.destination = MKMapItem(placemark: selectedMapItem.placeMark)
+        request.transportType = transportType
+
+        if transportType == .walking {
+            request.requestsAlternateRoutes = true
+        }
+
+        let directions = MKDirections(request: request)
+        let response = try await directions.calculate()
+
+        Task { @MainActor in
+            routes = response.routes
+        }
     }
 }

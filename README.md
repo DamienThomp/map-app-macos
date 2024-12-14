@@ -13,7 +13,7 @@ Demo project using SwiftUI to generate a macOS application with MapKit and Corel
 - Map controls in toolbar: 3D/2D toggle, user location, MapStyle .standard and .hybrid selection menu
 - Scale stepper in map view
 - Directions from current location to selected marker
-- Select transport type for route car, walking or transit
+- Select transport type for route: car, walking or transit
 
 ## Future Improvements
 

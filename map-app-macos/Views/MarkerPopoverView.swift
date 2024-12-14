@@ -38,12 +38,14 @@ struct MarkerPopoverView: View {
                     if let phoneNumber {
                         Link(destination: phoneNumber ) {
                             Image(systemName: "phone")
+                                .imageScale(.large)
                         }.foregroundStyle(.gray)
                     }
 
                     if let url {
                         Link(destination: url ) {
                             Image(systemName: "safari")
+                                .imageScale(.large)
                         }.foregroundStyle(.gray)
                     }
                 }.font(.caption)

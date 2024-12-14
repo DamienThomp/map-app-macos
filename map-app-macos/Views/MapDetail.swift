@@ -15,7 +15,7 @@ struct MapDetail: View {
 
     @Namespace var mapScope
 
-    @State var mapStyle: MapStyle = .standard
+    @State var mapStyle: MapStyle = .standard(pointsOfInterest: .excludingAll)
 
     private func updateScene(with mapItem: PlaceAnnotation?) {
         Task {
@@ -89,6 +89,7 @@ struct MapDetail: View {
 
                         mapStyle = .standard(
                             elevation: .flat,
+                            pointsOfInterest: .excludingAll,
                             showsTraffic: false
                         )
                     } label: {
@@ -99,6 +100,7 @@ struct MapDetail: View {
 
                         mapStyle = .hybrid(
                             elevation: .realistic,
+                            pointsOfInterest: .excludingAll,
                             showsTraffic: true
                         )
                     } label: {

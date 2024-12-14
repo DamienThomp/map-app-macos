@@ -29,6 +29,13 @@ struct MarkerImageView: View {
                     }
                 }
             }
+            .onTapGesture {
+                if selectedItem?.id == mapItem.id {
+                    withAnimation(.easeInOut) {
+                        showPopover = true
+                    }
+                }
+            }
             .padding(12)
             .popover(isPresented: $showPopover, arrowEdge: .leading) {
                 MarkerPopoverView()

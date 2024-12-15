@@ -20,7 +20,11 @@ class SearchResultsViewModel {
 
     var transportType: MKDirectionsTransportType = .automobile
 
-    private var locationManger = LocationManager()
+    private var locationManager: LocationManager
+
+    init(locationManager: LocationManager) {
+        self.locationManager = locationManager
+    }
 
     func performSearch(with searchTerm: String, for visibleRegion: MKCoordinateRegion?) async throws {
 
@@ -68,7 +72,7 @@ class SearchResultsViewModel {
     func getDirection() async throws {
 
         guard let selectedMapItem = await selectedMapItem,
-            let location = locationManger.location else { return }
+            let location = locationManager.location else { return }
 
         let startPoint = CLLocationCoordinate2D(
             latitude: location.coordinate.latitude,

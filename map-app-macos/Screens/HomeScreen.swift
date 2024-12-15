@@ -9,9 +9,6 @@ import SwiftUI
 
 struct HomeScreen: View {
 
-    let searchResultsViewModel = SearchResultsViewModel()
-    let locationManager = LocationManager()
-
     var body: some View {
         NavigationSplitView {
             SideBar()
@@ -19,8 +16,6 @@ struct HomeScreen: View {
         } detail: {
             MapDetail()
         }
-        .environment(locationManager)
-        .environment(searchResultsViewModel)
     }
 }
 

@@ -48,7 +48,11 @@ struct SideBar: View {
 }
 
 #Preview {
+    
+    let locationManager = LocationManager()
+    let viewModel = SearchResultsViewModel(locationManager: locationManager)
+    
     SideBar()
-        .environment(LocationManager())
-        .environment(SearchResultsViewModel())
+        .environment(locationManager)
+        .environment(viewModel)
 }

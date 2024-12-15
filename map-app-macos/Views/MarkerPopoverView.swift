@@ -81,6 +81,10 @@ struct MarkerPopoverView: View {
 }
 
 #Preview(traits: .fixedLayout(width: 200, height: 300)) {
+    
+    let locationManager = LocationManager()
+    let viewModel = SearchResultsViewModel(locationManager: locationManager)
+
     MarkerPopoverView()
-        .environment(SearchResultsViewModel())
+        .environment(viewModel)
 }

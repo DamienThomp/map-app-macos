@@ -85,7 +85,8 @@ struct MapDetail: View {
                 UserAnnotation()
 
                 ForEach(viewModel.routes, id: \.self) { element in
-                    MapPolyline(element)
+            
+                    MapPolyline(element.polyline)
                         .stroke(Gradient(colors: [.red, .indigo]), style: strokeStyle)
                 }
             }

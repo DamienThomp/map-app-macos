@@ -17,12 +17,25 @@ struct MarkerImageView: View {
 
     let mapItem: PlaceAnnotation
 
+    private var scaleEffect: CGFloat {
+
+        if showPopover {
+            return 1.8
+        }
+
+        if selectedItem?.id == mapItem.id && !showPopover {
+            return 1.5
+        }
+
+        return 1.0
+    }
+
     var body: some View {
 
         Image(systemName: mapItem.pointOfInterestIcon)
             .resizable()
             .scaledToFit()
-            .scaleEffect(showPopover ? 1.8 : 1.0)
+            .scaleEffect(scaleEffect)
             .frame(width: 30, height: 30)
             .foregroundStyle(.black, mapItem.pointOfInterestColor)
             .onChange(of: scene) {
@@ -45,7 +58,7 @@ struct MarkerImageView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(Gradient(colors: [.gray, .black]), lineWidth: 2)
-                    .scaleEffect(showPopover ? 1.8 : 1.0)
+                    .scaleEffect(scaleEffect)
             )
             .padding(12)
             .popover(isPresented: $showPopover, arrowEdge: .leading) {

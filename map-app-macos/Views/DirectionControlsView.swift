@@ -73,5 +73,9 @@ struct DirectionControlsView: View {
 }
 
 #Preview {
-    DirectionControlsView().environment(SearchResultsViewModel())
+    
+    let locationManager = LocationManager()
+    let viewModel = SearchResultsViewModel(locationManager: locationManager)
+
+    DirectionControlsView().environment(viewModel)
 }

@@ -20,7 +20,12 @@ struct MapDetail: View {
     @State var currentDistance: CGFloat = 1000
 
     private var strokeStyle: StrokeStyle {
-        StrokeStyle(lineWidth: 12, lineCap: .round, lineJoin: .round, miterLimit: 10)
+        StrokeStyle(
+            lineWidth: 12,
+            lineCap: .round,
+            lineJoin: .round,
+            miterLimit: 10
+        )
     }
 
     private func updateScene(with mapItem: PlaceAnnotation?) {
@@ -85,10 +90,10 @@ struct MapDetail: View {
                 }
             }
             .mapControls {
-                #if os(macOS)
+#if os(macOS)
                 MapZoomStepper()
                 MapPitchSlider()
-                #endif
+#endif
                 MapCompass()
             }
             .onMapCameraChange { context in
@@ -158,7 +163,10 @@ struct MapDetail: View {
 }
 
 #Preview {
+    let locationManager = LocationManager()
+    let viewModel = SearchResultsViewModel(locationManager: locationManager)
+
     MapDetail()
-        .environment(LocationManager())
-        .environment(SearchResultsViewModel())
+        .environment(locationManager)
+        .environment(viewModel)
 }

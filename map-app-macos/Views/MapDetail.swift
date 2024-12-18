@@ -20,6 +20,7 @@ struct MapDetail: View {
     @State var currentDistance: CGFloat = 1000
 
     private var strokeStyle: StrokeStyle {
+
         StrokeStyle(
             lineWidth: 12,
             lineCap: .round,
@@ -29,9 +30,11 @@ struct MapDetail: View {
     }
 
     private func updateScene(with mapItem: PlaceAnnotation?) {
+
         Task {
             do {
                 guard let mapItem else { return }
+                
                 try await searchResultsViewModel.getScene(with: mapItem)
             } catch {
                 print("update scene error: \(error.localizedDescription)")
@@ -39,8 +42,17 @@ struct MapDetail: View {
         }
     }
 
-    private func createCamera(with coordinate: CLLocationCoordinate2D, pitch: CGFloat, distance: CGFloat) -> MapCamera {
-        MapCamera(centerCoordinate: coordinate, distance: distance, pitch: currentPitch)
+    private func createCamera(
+        with coordinate: CLLocationCoordinate2D,
+        pitch: CGFloat,
+        distance: CGFloat
+    ) -> MapCamera {
+
+        MapCamera(
+            centerCoordinate: coordinate,
+            distance: distance,
+            pitch: pitch
+        )
     }
 
     private func getDirections() {
@@ -105,7 +117,9 @@ struct MapDetail: View {
             .onChange(of: viewModel.selectedMapItem) {
                 if let selectedMapItem = viewModel.selectedMapItem {
                     Task { @MainActor in
+
                         let mapCamera = createCamera(with: selectedMapItem.coordinate, pitch: currentPitch, distance: currentDistance)
+
                         withAnimation {
                             location.position = .camera(mapCamera)
                         } completion: {

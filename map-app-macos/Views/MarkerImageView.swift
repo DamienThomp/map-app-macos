@@ -38,6 +38,12 @@ struct MarkerImageView: View {
             .scaleEffect(scaleEffect)
             .frame(width: 30, height: 30)
             .foregroundStyle(.black, mapItem.pointOfInterestColor)
+            .padding(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Gradient(colors: [.gray, .black]), lineWidth: 2)
+                    .scaleEffect(scaleEffect)
+            )
             .onChange(of: scene) {
                 if selectedItem?.id == mapItem.id {
                     withAnimation(.easeInOut) {
@@ -55,13 +61,7 @@ struct MarkerImageView: View {
                     }
                 }
             }
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Gradient(colors: [.gray, .black]), lineWidth: 2)
-                    .scaleEffect(scaleEffect)
-            )
-            .padding(12)
-            .popover(isPresented: $showPopover, arrowEdge: .leading) {
+            .popover(isPresented: $showPopover) {
                 MarkerPopoverView()
             }
             .animation(.spring(duration: 0.5, bounce: 0.75), value: showPopover)

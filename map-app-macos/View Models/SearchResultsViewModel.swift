@@ -20,6 +20,9 @@ class SearchResultsViewModel {
 
     var transportType: MKDirectionsTransportType = .automobile
 
+    let sceneCache = NSCache<NSString, MKLookAroundScene>()
+    let searchCache = NSCache<NSString, MKLocalSearch.Response>()
+
     private var locationManager: LocationManager
 
     init(locationManager: LocationManager) {
@@ -30,6 +33,13 @@ class SearchResultsViewModel {
 
         guard let region = visibleRegion else { return }
 
+        let searchKey = NSString(string: searchTerm)
+
+        if let searchResultCache = searchCache.object(forKey: searchKey) {
+            await updateSeach(searchResultCache)
+            return
+        }
+
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = searchTerm
         request.resultTypes = .pointOfInterest
@@ -38,18 +48,26 @@ class SearchResultsViewModel {
         let search = MKLocalSearch(request: request)
         let response = try await search.start()
 
-        Task { @MainActor in
-            searchResults = response.mapItems.map(PlaceAnnotation.init)
-        }
+        searchCache.setObject(response, forKey: searchKey)
+
+        await updateSeach(response)
     }
 
     func getScene(with mapItem: PlaceAnnotation) async throws {
 
+        let coordinateKey = NSString(string: "\(mapItem.coordinate.latitude),\(mapItem.coordinate.longitude)")
+
+        if let cachedScene = sceneCache.object(forKey: coordinateKey) {
+            await updateScene(cachedScene)
+            return
+        }
+
         let request = MKLookAroundSceneRequest(coordinate: mapItem.coordinate)
         let lookAroundScene = try await request.scene
 
-        Task { @MainActor in
-            scene = lookAroundScene
+        if let lookAroundScene {
+            sceneCache.setObject(lookAroundScene, forKey: coordinateKey)
+            await updateScene(lookAroundScene)
         }
     }
 
@@ -94,5 +112,15 @@ class SearchResultsViewModel {
         Task { @MainActor in
             routes = response.routes
         }
+    }
+
+    @MainActor
+    private func updateScene(_ lookAroundScene: MKLookAroundScene) {
+        scene = lookAroundScene
+    }
+
+    @MainActor
+    private func updateSeach(_ searchResponse: MKLocalSearch.Response) {
+        searchResults = searchResponse.mapItems.map(PlaceAnnotation.init)
     }
 }

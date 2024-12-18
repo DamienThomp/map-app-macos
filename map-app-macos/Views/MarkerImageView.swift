@@ -37,13 +37,16 @@ struct MarkerImageView: View {
             .scaledToFit()
             .scaleEffect(scaleEffect)
             .frame(width: 30, height: 30)
-            .foregroundStyle(.black, mapItem.pointOfInterestColor)
-            .padding(12)
+            .foregroundStyle(
+                .black,
+                mapItem.pointOfInterestColor
+            )
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(Gradient(colors: [.gray, .black]), lineWidth: 2)
                     .scaleEffect(scaleEffect)
             )
+            .padding(12)
             .onChange(of: scene) {
                 if selectedItem?.id == mapItem.id {
                     withAnimation(.easeInOut) {

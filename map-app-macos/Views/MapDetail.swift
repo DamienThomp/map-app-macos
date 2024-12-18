@@ -60,7 +60,7 @@ struct MapDetail: View {
             do {
                 try await searchResultsViewModel.getDirection()
             } catch {
-                print(error.localizedDescription)
+                print("get directions error: \(error.localizedDescription)")
             }
         }
     }
@@ -99,7 +99,10 @@ struct MapDetail: View {
                 ForEach(viewModel.routes, id: \.self) { element in
             
                     MapPolyline(element.polyline)
-                        .stroke(Gradient(colors: [.red, .indigo]), style: strokeStyle)
+                        .stroke(
+                            Gradient(colors: [.red, .indigo]),
+                            style: strokeStyle
+                        )
                 }
             }
             .mapControls {
@@ -115,6 +118,7 @@ struct MapDetail: View {
                 locationManager.visibleRegion = context.region
             }
             .onChange(of: viewModel.selectedMapItem) {
+
                 if let selectedMapItem = viewModel.selectedMapItem {
                     Task { @MainActor in
 

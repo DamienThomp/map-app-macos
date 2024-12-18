@@ -20,5 +20,11 @@ struct HomeScreen: View {
 }
 
 #Preview {
+
+    let locationManager = LocationManager()
+    let viewModel = SearchResultsViewModel(locationManager: locationManager)
+
     HomeScreen()
+        .environment(locationManager)
+        .environment(viewModel)
 }

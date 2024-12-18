@@ -26,14 +26,14 @@ enum TransportOptions: String, CaseIterable {
         }
     }
 
-    var icon: String {
+    var icon: Image {
         switch self {
         case .automobile:
-            "car"
+            SymbolHelper.car.image
         case .walking:
-            "figure.walk"
+            SymbolHelper.figureWalk.image
         case .transit:
-            "bus.fill"
+            SymbolHelper.busFill.image
         }
     }
 }
@@ -50,7 +50,7 @@ struct DirectionControlsView: View {
                 viewModel.routes = []
             }
             label: {
-                Image(systemName: "xmark.circle.fill")
+                SymbolHelper.xmarkCircleFill.image
                     .imageScale(.small)
             }.buttonStyle(.plain)
 
@@ -59,7 +59,7 @@ struct DirectionControlsView: View {
                     Button {
                         viewModel.transportType = option.optionType
                     } label: {
-                        Image(systemName: option.icon)
+                        option.icon
                             .foregroundStyle(viewModel.transportType == option.optionType ? .white : .secondary)
                     }.background(viewModel.transportType == option.optionType ? .blue : .clear)
                 }

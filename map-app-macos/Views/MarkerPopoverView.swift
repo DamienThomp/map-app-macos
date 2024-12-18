@@ -46,14 +46,14 @@ struct MarkerPopoverView: View {
 
                     if let phoneNumber {
                         Link(destination: phoneNumber ) {
-                            Image(systemName: "phone")
+                            SymbolHelper.phone.image
                                 .imageScale(.large)
                         }.foregroundStyle(.gray)
                     }
 
                     if let url {
                         Link(destination: url ) {
-                            Image(systemName: "safari")
+                            SymbolHelper.safari.image
                                 .imageScale(.large)
                         }.foregroundStyle(.gray)
                     }
@@ -66,7 +66,7 @@ struct MarkerPopoverView: View {
                 } label: {
                     HStack {
                         Text("Get Directions")
-                        Image(systemName: "arrow.trianglehead.turn.up.right.diamond")
+                        SymbolHelper.arrowTriangleheadturnUpRightDiamond.image
                     }.padding(6)
                 }.buttonStyle(.borderedProminent)
             }

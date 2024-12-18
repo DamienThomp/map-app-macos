@@ -22,6 +22,8 @@
 		38433C312C585843009EE906 /* SearchListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38433C302C585843009EE906 /* SearchListCellView.swift */; };
 		3845A0212C6EFD8F00898F4E /* AnnotationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3845A0202C6EFD8F00898F4E /* AnnotationHelper.swift */; };
 		38B005192D0E186D00976DD7 /* DirectionControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B005182D0E186D00976DD7 /* DirectionControlsView.swift */; };
+		38C92F542D1349E0001BDE5F /* SFSymbolsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C92F532D1349E0001BDE5F /* SFSymbolsHelper.swift */; };
+		38C92F572D134AF8001BDE5F /* SFSymbolsMacro in Frameworks */ = {isa = PBXBuildFile; productRef = 38C92F562D134AF8001BDE5F /* SFSymbolsMacro */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,7 @@
 		38433C302C585843009EE906 /* SearchListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchListCellView.swift; sourceTree = "<group>"; };
 		3845A0202C6EFD8F00898F4E /* AnnotationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationHelper.swift; sourceTree = "<group>"; };
 		38B005182D0E186D00976DD7 /* DirectionControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionControlsView.swift; sourceTree = "<group>"; };
+		38C92F532D1349E0001BDE5F /* SFSymbolsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbolsHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38C92F572D134AF8001BDE5F /* SFSymbolsMacro in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				3845A0202C6EFD8F00898F4E /* AnnotationHelper.swift */,
+				38C92F532D1349E0001BDE5F /* SFSymbolsHelper.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -195,6 +200,9 @@
 				Base,
 			);
 			mainGroup = 38257EC02C4EB84B00D3256F;
+			packageReferences = (
+				38C92F552D134AF8001BDE5F /* XCRemoteSwiftPackageReference "SFSymbolsMacro" */,
+			);
 			productRefGroup = 38257ECA2C4EB84B00D3256F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -251,6 +259,7 @@
 				38257EEA2C4ECB3400D3256F /* SearchResultsViewModel.swift in Sources */,
 				38257EE52C4EBC5500D3256F /* LocationManager.swift in Sources */,
 				38433C312C585843009EE906 /* SearchListCellView.swift in Sources */,
+				38C92F542D1349E0001BDE5F /* SFSymbolsHelper.swift in Sources */,
 				38257EE02C4EB94100D3256F /* SideBar.swift in Sources */,
 				38257EDD2C4EB89B00D3256F /* HomeScreen.swift in Sources */,
 				38257EE22C4EB95200D3256F /* MapDetail.swift in Sources */,
@@ -402,6 +411,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Damien-Thompson.map-app-macos";
@@ -438,6 +448,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Damien-Thompson.map-app-macos";
@@ -472,6 +483,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		38C92F552D134AF8001BDE5F /* XCRemoteSwiftPackageReference "SFSymbolsMacro" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lukepistrol/SFSymbolsMacro.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		38C92F562D134AF8001BDE5F /* SFSymbolsMacro */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 38C92F552D134AF8001BDE5F /* XCRemoteSwiftPackageReference "SFSymbolsMacro" */;
+			productName = SFSymbolsMacro;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 38257EC12C4EB84B00D3256F /* Project object */;
 }

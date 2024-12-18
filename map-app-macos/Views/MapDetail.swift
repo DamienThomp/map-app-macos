@@ -158,7 +158,7 @@ struct MapDetail: View {
                         Text("Hydrid")
                     }
                 } label: {
-                    Image(systemName: "map")
+                    SymbolHelper.map.image
                 }
             }
             .overlay(alignment: .topTrailing) {

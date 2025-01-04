@@ -115,6 +115,12 @@ class SearchResultsViewModel {
     }
 
     @MainActor
+    func resetDirections() {
+        routes = []
+        transportType = .automobile
+    }
+
+    @MainActor
     private func updateScene(_ lookAroundScene: MKLookAroundScene) {
         scene = lookAroundScene
     }

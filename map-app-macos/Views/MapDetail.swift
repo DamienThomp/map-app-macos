@@ -97,7 +97,7 @@ struct MapDetail: View {
                 UserAnnotation()
 
                 ForEach(viewModel.routes, id: \.self) { element in
-            
+
                     MapPolyline(element.polyline)
                         .stroke(
                             Gradient(colors: [.red, .indigo]),
@@ -127,6 +127,8 @@ struct MapDetail: View {
                         withAnimation {
                             location.position = .camera(mapCamera)
                         } completion: {
+                            
+                            viewModel.resetDirections()
                             updateScene(with: selectedMapItem)
                         }
                     }

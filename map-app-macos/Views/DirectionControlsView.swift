@@ -61,7 +61,10 @@ struct DirectionControlsView: View {
                     } label: {
                         option.icon
                             .foregroundStyle(viewModel.transportType == option.optionType ? .white : .secondary)
-                    }.background(viewModel.transportType == option.optionType ? .blue : .clear)
+                    }
+                    .background(viewModel.transportType == option.optionType ? .blue : .clear)
+                    .buttonStyle(.bordered)
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
                 }
             }
         }

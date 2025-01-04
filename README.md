@@ -17,9 +17,9 @@ Demo project using SwiftUI to generate a macOS application with MapKit and Corel
 
 ## Future Improvements
 
-- Add location to favourites list
-- Settings for units (metric or imperial)
-- Add more details/actions to Map Marker popovers
+- [ ] Add location to favourites list
+- [ ] Settings for units (metric or imperial)
+- [ ] Add more details/actions to Map Marker popovers
 
 ## Screenshot
 

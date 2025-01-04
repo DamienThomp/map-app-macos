@@ -10,7 +10,6 @@ import SwiftUI
 
 @SFSymbol
 enum SymbolHelper: String {
-
     case map
     case phone
     case safari

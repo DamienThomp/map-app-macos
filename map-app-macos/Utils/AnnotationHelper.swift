@@ -29,7 +29,7 @@ enum AnnotationHelper {
         case .hotel:
             return ("building.2.crop.circle.fill", .teal)
         case .restaurant:
-            return ("fork.knife.circle.fill", .red)
+            return ("fork.knife.circle.fill", .orange)
         case .store:
             return ("storefront.circle.fill", .orange)
         case .publicTransport:

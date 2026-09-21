@@ -38,12 +38,12 @@ struct MarkerImageView: View {
             .scaleEffect(scaleEffect)
             .frame(width: 30, height: 30)
             .foregroundStyle(
-                .black,
-                mapItem.pointOfInterestColor
+                .black.gradient,
+                mapItem.pointOfInterestColor.gradient
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(Gradient(colors: [.gray, .black]), lineWidth: 2)
+                    .stroke(Gradient(colors: [mapItem.pointOfInterestColor, .black]), lineWidth: 2)
                     .scaleEffect(scaleEffect)
             )
             .padding(12)

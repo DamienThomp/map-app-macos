@@ -9,26 +9,13 @@ import SwiftUI
 
 struct SideBar: View {
 
-    @Environment(LocationManager.self) private var locationManger
+    @Environment(LocationManager.self) private var locationManager
     @Environment(SearchResultsViewModel.self) private var searchResultsViewModel
 
     @State private var searchText: String = ""
 
-    private func search() {
-        Task {
-            do {
-                try await searchResultsViewModel.performSearch(
-                    with: searchText,
-                    for: locationManger.visibleRegion
-                )
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-    }
-
     var body: some View {
-        
+
         VStack {
             SearchResultsList()
         }
@@ -39,19 +26,22 @@ struct SideBar: View {
         )
         .onChange(of: searchText) {
             if searchText.isEmpty {
-                searchResultsViewModel.searchResults = []
+                searchResultsViewModel.clearSearchResults()
             } else {
-                search()
+                searchResultsViewModel.performSearch(
+                    with: searchText,
+                    for: locationManager.visibleRegion
+                )
             }
         }.padding()
     }
 }
 
 #Preview {
-    
+
     let locationManager = LocationManager()
     let viewModel = SearchResultsViewModel(locationManager: locationManager)
-    
+
     SideBar()
         .environment(locationManager)
         .environment(viewModel)

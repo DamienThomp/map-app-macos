@@ -118,20 +118,19 @@ struct MapDetail: View {
                 locationManager.visibleRegion = context.region
             }
             .onChange(of: viewModel.selectedMapItem) {
+                guard let selectedMapItem = viewModel.selectedMapItem else { return }
 
-                if let selectedMapItem = viewModel.selectedMapItem {
-                    Task { @MainActor in
+                let mapCamera = createCamera(
+                    with: selectedMapItem.coordinate,
+                    pitch: currentPitch,
+                    distance: currentDistance
+                )
 
-                        let mapCamera = createCamera(with: selectedMapItem.coordinate, pitch: currentPitch, distance: currentDistance)
-
-                        withAnimation {
-                            location.position = .camera(mapCamera)
-                        } completion: {
-                            
-                            viewModel.resetDirections()
-                            updateScene(with: selectedMapItem)
-                        }
-                    }
+                withAnimation {
+                    location.position = .camera(mapCamera)
+                } completion: {
+                    viewModel.resetDirections()
+                    updateScene(with: selectedMapItem)
                 }
             }
             .toolbar {

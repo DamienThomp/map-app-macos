@@ -10,7 +10,7 @@ import MapKit
 
 struct SearchResultsList: View {
 
-    @Environment(LocationManager.self) private var locationManger
+    @Environment(LocationManager.self) private var locationManager
     @Environment(SearchResultsViewModel.self) private var searchResultsViewModel
 
     @State private var selection: UUID?
@@ -23,7 +23,7 @@ struct SearchResultsList: View {
                     ForEach(searchResultsViewModel.searchResults, id: \.id) { item in
                         SearchListCellView(
                             mapItem: item,
-                            userLocation: locationManger.location
+                            userLocation: locationManager.location
                         ).onTapGesture {
                             Task {
                                 if selection == item.id {

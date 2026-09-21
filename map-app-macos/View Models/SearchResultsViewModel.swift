@@ -9,88 +9,82 @@ import Foundation
 import MapKit
 import Observation
 
+@MainActor
 @Observable
-class SearchResultsViewModel {
+final class SearchResultsViewModel {
 
-    @MainActor var searchResults = [PlaceAnnotation]()
-    @MainActor var scene: MKLookAroundScene?
-    @MainActor var selectedMapItem: PlaceAnnotation?
-    @MainActor var routes = [MKRoute]()
-    @MainActor var showingDirections: Bool = false
-
+    var searchResults = [PlaceAnnotation]()
+    var scene: MKLookAroundScene?
+    var selectedMapItem: PlaceAnnotation?
+    var routes = [MKRoute]()
+    var showingDirections: Bool = false
     var transportType: MKDirectionsTransportType = .automobile
 
     let sceneCache = NSCache<NSString, MKLookAroundScene>()
     let searchCache = NSCache<NSString, MKLocalSearch.Response>()
 
-    private var locationManager: LocationManager
+    private let locationManager: LocationManager
+    private var searchTask: Task<Void, Never>?
 
     init(locationManager: LocationManager) {
         self.locationManager = locationManager
     }
 
-    func performSearch(with searchTerm: String, for visibleRegion: MKCoordinateRegion?) async throws {
+    func clearSearchResults() {
+        searchTask?.cancel()
+        searchTask = nil
+        searchResults = []
+    }
 
-        guard let region = visibleRegion else { return }
-
-        let searchKey = NSString(string: searchTerm)
-
-        if let searchResultCache = searchCache.object(forKey: searchKey) {
-            await updateSeach(searchResultCache)
-            return
+    func performSearch(with searchTerm: String, for visibleRegion: MKCoordinateRegion?) {
+        searchTask?.cancel()
+        searchTask = Task {
+            do {
+                try await Task.sleep(for: .milliseconds(300))
+                try Task.checkCancellation()
+                try await executeSearch(with: searchTerm, for: visibleRegion)
+            } catch is CancellationError {
+                return
+            } catch {
+                print(error.localizedDescription)
+            }
         }
-
-        let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = searchTerm
-        request.resultTypes = .pointOfInterest
-        request.region = region
-
-        let search = MKLocalSearch(request: request)
-        let response = try await search.start()
-
-        searchCache.setObject(response, forKey: searchKey)
-
-        await updateSeach(response)
     }
 
     func getScene(with mapItem: PlaceAnnotation) async throws {
-
         let coordinateKey = NSString(string: "\(mapItem.coordinate.latitude),\(mapItem.coordinate.longitude)")
 
         if let cachedScene = sceneCache.object(forKey: coordinateKey) {
-            await updateScene(cachedScene)
+            updateScene(cachedScene)
             return
         }
 
         let request = MKLookAroundSceneRequest(coordinate: mapItem.coordinate)
         let lookAroundScene = try await request.scene
 
+        try Task.checkCancellation()
+
         if let lookAroundScene {
             sceneCache.setObject(lookAroundScene, forKey: coordinateKey)
-            await updateScene(lookAroundScene)
+            updateScene(lookAroundScene)
         }
     }
 
     func updateSelectedItem(with id: UUID?) {
+        selectedMapItem = nil
 
-        Task { @MainActor in
-
-            selectedMapItem = nil
-
-            guard let id,
-                  let mapItem = searchResults.first(where: { $0.id == id })
-            else {
-                return
-            }
-
-            selectedMapItem = mapItem
+        guard let id,
+              let mapItem = searchResults.first(where: { $0.id == id })
+        else {
+            return
         }
+
+        selectedMapItem = mapItem
     }
 
     func getDirection() async throws {
-
-        guard let selectedMapItem = await selectedMapItem,
-            let location = locationManager.location else { return }
+        guard let selectedMapItem,
+              let location = locationManager.location else { return }
 
         let startPoint = CLLocationCoordinate2D(
             latitude: location.coordinate.latitude,
@@ -109,24 +103,44 @@ class SearchResultsViewModel {
         let directions = MKDirections(request: request)
         let response = try await directions.calculate()
 
-        Task { @MainActor in
-            routes = response.routes
-        }
+        try Task.checkCancellation()
+        routes = response.routes
     }
 
-    @MainActor
     func resetDirections() {
         routes = []
         transportType = .automobile
     }
 
-    @MainActor
+    private func executeSearch(with searchTerm: String, for visibleRegion: MKCoordinateRegion?) async throws {
+        guard let region = visibleRegion else { return }
+
+        let searchKey = NSString(string: searchTerm)
+
+        if let searchResultCache = searchCache.object(forKey: searchKey) {
+            updateSearch(searchResultCache)
+            return
+        }
+
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = searchTerm
+        request.resultTypes = .pointOfInterest
+        request.region = region
+
+        let search = MKLocalSearch(request: request)
+        let response = try await search.start()
+
+        try Task.checkCancellation()
+
+        searchCache.setObject(response, forKey: searchKey)
+        updateSearch(response)
+    }
+
     private func updateScene(_ lookAroundScene: MKLookAroundScene) {
         scene = lookAroundScene
     }
 
-    @MainActor
-    private func updateSeach(_ searchResponse: MKLocalSearch.Response) {
+    private func updateSearch(_ searchResponse: MKLocalSearch.Response) {
         searchResults = searchResponse.mapItems.map(PlaceAnnotation.init)
     }
 }

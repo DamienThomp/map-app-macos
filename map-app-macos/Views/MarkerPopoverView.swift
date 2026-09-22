@@ -10,29 +10,18 @@ import MapKit
 
 struct MarkerPopoverView: View {
 
-    @Environment(SearchResultsViewModel.self) var searchResultsViewModel
+    var viewModel: SearchResultsViewModel
 
     private var url: URL? {
-        searchResultsViewModel.selectedMapItem?.url
+        viewModel.selectedMapItem?.url
     }
 
     private var phoneNumber: URL? {
-
-        guard let phoneNumber = searchResultsViewModel.selectedMapItem?.phoneNumber else { return nil }
+        guard let phoneNumber = viewModel.selectedMapItem?.phoneNumber else { return nil }
 
         let formattedNumber = phoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
 
         return URL(string: "tel:\(formattedNumber)")
-    }
-
-    private func getDirections() {
-        Task {
-            do {
-                try await searchResultsViewModel.getDirection()
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
     }
 
     var body: some View {
@@ -41,39 +30,48 @@ struct MarkerPopoverView: View {
             VStack(alignment: .leading) {
 
                 HStack(spacing: 10) {
-                    
-                    Text(searchResultsViewModel.selectedMapItem?.title ?? "").font(.title2)
+
+                    Text(viewModel.selectedMapItem?.title ?? "").font(.title2)
 
                     if let phoneNumber {
-                        Link(destination: phoneNumber ) {
+                        Link(destination: phoneNumber) {
                             SymbolHelper.phone.image
                                 .imageScale(.large)
-                        }.foregroundStyle(.gray)
+                        }
+                        .foregroundStyle(.gray)
+                        .accessibilityLabel("Call location")
                     }
 
                     if let url {
-                        Link(destination: url ) {
+                        Link(destination: url) {
                             SymbolHelper.safari.image
                                 .imageScale(.large)
-                        }.foregroundStyle(.gray)
+                        }
+                        .foregroundStyle(.gray)
+                        .accessibilityLabel("Open website")
                     }
                 }.font(.caption)
 
                 Button {
-                    searchResultsViewModel.showingDirections = false
-                    getDirections()
-                    searchResultsViewModel.showingDirections = true
+                    viewModel.requestDirections()
                 } label: {
                     HStack {
                         Text("Get Directions")
                         SymbolHelper.arrowTriangleheadturnUpRightDiamond.image
                     }.padding(6)
-                }.buttonStyle(.borderedProminent)
+                }
+                .buttonStyle(.borderedProminent)
             }
 
-            LookAroundPreview(initialScene: searchResultsViewModel.scene)
-                .frame(height: 150)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+            if let sceneErrorMessage = viewModel.sceneErrorMessage {
+                Text(sceneErrorMessage)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            } else {
+                LookAroundPreview(initialScene: viewModel.scene)
+                    .frame(height: 150)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
         }
         .frame(width: 300)
         .padding()
@@ -81,10 +79,9 @@ struct MarkerPopoverView: View {
 }
 
 #Preview(traits: .fixedLayout(width: 200, height: 300)) {
-    
+
     let locationManager = LocationManager()
     let viewModel = SearchResultsViewModel(locationManager: locationManager)
 
-    MarkerPopoverView()
-        .environment(viewModel)
+    MarkerPopoverView(viewModel: viewModel)
 }

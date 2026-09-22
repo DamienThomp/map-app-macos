@@ -10,20 +10,23 @@ import MapKit
 
 struct MarkerImageView: View {
 
-    @State private var showPopover: Bool = false
-    @Binding var selectedItem: PlaceAnnotation?
-    @Binding var scene: MKLookAroundScene?
-    @Binding var route: [MKRoute]
-
+    var viewModel: SearchResultsViewModel
     let mapItem: PlaceAnnotation
 
-    private var scaleEffect: CGFloat {
+    private var isSelected: Bool {
+        viewModel.selectedMapItem?.id == mapItem.id
+    }
 
+    private var showPopover: Bool {
+        viewModel.markerPresentation == .lookAround && isSelected
+    }
+
+    private var scaleEffect: CGFloat {
         if showPopover {
             return 1.8
         }
 
-        if selectedItem?.id == mapItem.id && !showPopover {
+        if isSelected {
             return 1.5
         }
 
@@ -47,26 +50,25 @@ struct MarkerImageView: View {
                     .scaleEffect(scaleEffect)
             )
             .padding(12)
-            .onChange(of: scene) {
-                if selectedItem?.id == mapItem.id {
-                    withAnimation(.easeInOut) {
-                        showPopover = true
-                    }
-                }
-            }
-            .onChange(of: route) {
-                showPopover = false
-            }
             .onTapGesture {
-                if selectedItem?.id == mapItem.id {
-                    withAnimation(.easeInOut) {
-                        showPopover = true
-                    }
+                if isSelected {
+                    viewModel.markerPresentation = .lookAround
                 }
             }
-            .popover(isPresented: $showPopover) {
-                MarkerPopoverView()
+            .popover(isPresented: popoverBinding) {
+                MarkerPopoverView(viewModel: viewModel)
             }
             .animation(.spring(duration: 0.5, bounce: 0.75), value: showPopover)
+    }
+
+    private var popoverBinding: Binding<Bool> {
+        Binding(
+            get: { showPopover },
+            set: { isPresented in
+                if !isPresented {
+                    viewModel.dismissMarkerPopover()
+                }
+            }
+        )
     }
 }

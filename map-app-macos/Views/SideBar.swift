@@ -16,7 +16,21 @@ struct SideBar: View {
 
     var body: some View {
 
+        @Bindable var viewModel = searchResultsViewModel
+
         VStack {
+            if case .loading = viewModel.searchState {
+                ProgressView("Searching…")
+                    .padding(.vertical, 8)
+            }
+
+            if case .failed(let message) = viewModel.searchState {
+                Text(message)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+                    .padding(.vertical, 4)
+            }
+
             SearchResultsList()
         }
         .searchable(

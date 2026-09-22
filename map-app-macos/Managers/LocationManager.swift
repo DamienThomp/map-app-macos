@@ -15,6 +15,7 @@ import MapKit
 final class LocationManager: NSObject, CLLocationManagerDelegate {
 
     private let manager = CLLocationManager()
+    @ObservationIgnored
     private nonisolated(unsafe) var locationUpdatesTask: Task<Void, Never>?
 
     var location: CLLocation?

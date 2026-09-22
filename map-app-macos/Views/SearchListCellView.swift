@@ -19,6 +19,7 @@ struct SearchListCellView: View {
 
             Image(systemName: mapItem.pointOfInterestIcon)
                 .foregroundStyle(.black, mapItem.pointOfInterestColor)
+                .accessibilityHidden(true)
             Text(mapItem.title ?? "")
                 .font(.system(size: 14))
 

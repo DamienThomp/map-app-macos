@@ -29,19 +29,6 @@ struct MapDetail: View {
         )
     }
 
-    private func updateScene(with mapItem: PlaceAnnotation?) {
-
-        Task {
-            do {
-                guard let mapItem else { return }
-                
-                try await searchResultsViewModel.getScene(with: mapItem)
-            } catch {
-                print("update scene error: \(error.localizedDescription)")
-            }
-        }
-    }
-
     private func createCamera(
         with coordinate: CLLocationCoordinate2D,
         pitch: CGFloat,
@@ -53,16 +40,6 @@ struct MapDetail: View {
             distance: distance,
             pitch: pitch
         )
-    }
-
-    private func getDirections() {
-        Task {
-            do {
-                try await searchResultsViewModel.getDirection()
-            } catch {
-                print("get directions error: \(error.localizedDescription)")
-            }
-        }
     }
 
     var body: some View {
@@ -78,18 +55,13 @@ struct MapDetail: View {
                 scope: mapScope
             ) {
 
-                ForEach(searchResultsViewModel.searchResults, id: \.id) { mapItem in
+                ForEach(viewModel.searchResults, id: \.id) { mapItem in
 
                     Annotation(
                         mapItem.title ?? "",
                         coordinate: mapItem.coordinate
                     ) {
-                        MarkerImageView(
-                            selectedItem: $viewModel.selectedMapItem,
-                            scene: $viewModel.scene,
-                            route: $viewModel.routes,
-                            mapItem: mapItem
-                        )
+                        MarkerImageView(viewModel: searchResultsViewModel, mapItem: mapItem)
                     }
                     .tag(mapItem)
                 }
@@ -117,8 +89,13 @@ struct MapDetail: View {
                 currentDistance = context.camera.distance
                 locationManager.visibleRegion = context.region
             }
-            .onChange(of: viewModel.selectedMapItem) {
-                guard let selectedMapItem = viewModel.selectedMapItem else { return }
+            .onChange(of: viewModel.selectedMapItem) { _, selectedMapItem in
+                guard let selectedMapItem else {
+                    viewModel.selectItem(nil)
+                    return
+                }
+
+                viewModel.selectItem(selectedMapItem)
 
                 let mapCamera = createCamera(
                     with: selectedMapItem.coordinate,
@@ -130,50 +107,15 @@ struct MapDetail: View {
                     location.position = .camera(mapCamera)
                 } completion: {
                     viewModel.resetDirections()
-                    updateScene(with: selectedMapItem)
+                    viewModel.loadScene(for: selectedMapItem)
                 }
             }
             .toolbar {
-
-                MapUserLocationButton(scope: mapScope)
-                    .controlSize(.large)
-
-                MapPitchToggle(scope: mapScope)
-                    .mapControlVisibility(.visible)
-                    .controlSize(.large)
-
-                Menu {
-                    Button {
-
-                        mapStyle = .standard(
-                            elevation: .flat,
-                            showsTraffic: false
-                        )
-                    } label: {
-                        Text("Standard")
-                    }
-
-                    Button {
-
-                        mapStyle = .hybrid(
-                            elevation: .realistic,
-                            showsTraffic: true
-                        )
-                    } label: {
-                        Text("Hydrid")
-                    }
-                } label: {
-                    SymbolHelper.map.image
-                }
+                MapToolbarControls(mapStyle: $mapStyle, mapScope: mapScope)
             }
             .overlay(alignment: .topTrailing) {
                 if viewModel.routes.first != nil {
                     DirectionControlsView()
-                }
-            }
-            .onChange(of: viewModel.transportType) {
-                if viewModel.routes.first != nil {
-                    getDirections()
                 }
             }
             .mapStyle(mapStyle)

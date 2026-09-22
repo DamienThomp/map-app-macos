@@ -11,7 +11,7 @@ import SwiftUI
 
 enum AnnotationHelper {
 
-    static func getIconforAnotation( _ placeOfInterest: MKPointOfInterestCategory?) -> (String, Color) {
+    static func getIconForAnnotation(_ placeOfInterest: MKPointOfInterestCategory?) -> (String, Color) {
 
         switch placeOfInterest {
         case .airport:

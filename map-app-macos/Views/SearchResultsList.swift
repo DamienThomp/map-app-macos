@@ -13,39 +13,29 @@ struct SearchResultsList: View {
     @Environment(LocationManager.self) private var locationManager
     @Environment(SearchResultsViewModel.self) private var searchResultsViewModel
 
-    @State private var selection: UUID?
-
     var body: some View {
 
-        List(selection: $selection) {
-            if !searchResultsViewModel.searchResults.isEmpty {
+        @Bindable var viewModel = searchResultsViewModel
+
+        List(selection: $viewModel.selectedMapItem) {
+            if !viewModel.searchResults.isEmpty {
                 Section("Locations") {
-                    ForEach(searchResultsViewModel.searchResults, id: \.id) { item in
+                    ForEach(viewModel.searchResults, id: \.id) { item in
                         SearchListCellView(
                             mapItem: item,
                             userLocation: locationManager.location
-                        ).onTapGesture {
-                            Task {
-                                if selection == item.id {
-
-                                    selection = nil
-                                    try await Task.sleep(for: .seconds(0.5))
-                                }
-
-                                selection = item.id
-                            }
-                        }
+                        )
+                        .tag(item)
                     }
                 }
             }
-        }
-        .onChange(of: selection) {
-            searchResultsViewModel.updateSelectedItem(with: selection)
         }
         .listStyle(.sidebar)
     }
 }
 
 #Preview {
-    SearchResultsList().environment(LocationManager())
+    SearchResultsList()
+        .environment(LocationManager())
+        .environment(SearchResultsViewModel(locationManager: LocationManager()))
 }

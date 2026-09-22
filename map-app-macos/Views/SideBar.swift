@@ -9,22 +9,19 @@ import SwiftUI
 
 struct SideBar: View {
 
-    @Environment(LocationManager.self) private var locationManager
-    @Environment(SearchResultsViewModel.self) private var searchResultsViewModel
-
-    @State private var searchText: String = ""
+    @Environment(SearchStore.self) private var searchStore
 
     var body: some View {
 
-        @Bindable var viewModel = searchResultsViewModel
+        @Bindable var searchStore = searchStore
 
         VStack {
-            if case .loading = viewModel.searchState {
+            if case .loading = searchStore.searchState {
                 ProgressView("Searching…")
                     .padding(.vertical, 8)
             }
 
-            if case .failed(let message) = viewModel.searchState {
+            if case .failed(let message) = searchStore.searchState {
                 Text(message)
                     .font(.caption)
                     .foregroundStyle(.red)
@@ -34,29 +31,21 @@ struct SideBar: View {
             SearchResultsList()
         }
         .searchable(
-            text: $searchText,
+            text: $searchStore.searchQuery,
             placement: .sidebar,
             prompt: "Search"
         )
-        .onChange(of: searchText) {
-            if searchText.isEmpty {
-                searchResultsViewModel.clearSearchResults()
+        .onChange(of: searchStore.searchQuery) {
+            if searchStore.searchQuery.isEmpty {
+                searchStore.clearSearch()
             } else {
-                searchResultsViewModel.performSearch(
-                    with: searchText,
-                    for: locationManager.visibleRegion
-                )
+                searchStore.performSearch()
             }
-        }.padding()
+        }
+        .padding()
     }
 }
 
 #Preview {
-
-    let locationManager = LocationManager()
-    let viewModel = SearchResultsViewModel(locationManager: locationManager)
-
-    SideBar()
-        .environment(locationManager)
-        .environment(viewModel)
+    AppDependencies.make().installEnvironments(on: SideBar())
 }

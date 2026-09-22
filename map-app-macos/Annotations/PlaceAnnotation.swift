@@ -15,8 +15,34 @@ struct PlaceAnnotation: Identifiable, Hashable {
     let mapItem: MKMapItem
 
     init(mapItem: MKMapItem) {
-        self.id = UUID()
         self.mapItem = mapItem
+        self.id = Self.stableID(for: mapItem)
+    }
+
+    private static func stableID(for mapItem: MKMapItem) -> UUID {
+        let coordinate = coordinate(for: mapItem)
+        let key = "\(mapItem.name ?? "")|\(coordinate.latitude)|\(coordinate.longitude)"
+        var bytes = [UInt8](repeating: 0, count: 16)
+
+        for (index, byte) in key.utf8.enumerated() {
+            bytes[index % 16] ^= byte
+        }
+
+        return UUID(
+            uuid: (
+                bytes[0], bytes[1], bytes[2], bytes[3],
+                bytes[4], bytes[5], bytes[6], bytes[7],
+                bytes[8], bytes[9], bytes[10], bytes[11],
+                bytes[12], bytes[13], bytes[14], bytes[15]
+            )
+        )
+    }
+
+    private static func coordinate(for mapItem: MKMapItem) -> CLLocationCoordinate2D {
+        if #available(macOS 26.0, iOS 18.0, *) {
+            return mapItem.location.coordinate
+        }
+        return mapItem.placemark.coordinate
     }
 
     var title: String? {

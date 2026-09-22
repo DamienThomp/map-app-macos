@@ -10,17 +10,14 @@ import MapKit
 
 struct MapDetail: View {
 
-    @Environment(LocationManager.self) private var locationManager
-    @Environment(SearchResultsViewModel.self) private var searchResultsViewModel
+    @Environment(MapStore.self) private var mapStore
+    @Environment(SearchStore.self) private var searchStore
+    @Environment(PlaceStore.self) private var placeStore
+    @Environment(DirectionsStore.self) private var directionsStore
 
     @Namespace var mapScope
 
-    @State var mapStyle: MapStyle = .standard
-    @State var currentPitch: CGFloat = 0.0
-    @State var currentDistance: CGFloat = 1000
-
     private var strokeStyle: StrokeStyle {
-
         StrokeStyle(
             lineWidth: 12,
             lineCap: .round,
@@ -29,47 +26,35 @@ struct MapDetail: View {
         )
     }
 
-    private func createCamera(
-        with coordinate: CLLocationCoordinate2D,
-        pitch: CGFloat,
-        distance: CGFloat
-    ) -> MapCamera {
-
-        MapCamera(
-            centerCoordinate: coordinate,
-            distance: distance,
-            pitch: pitch
-        )
-    }
-
     var body: some View {
 
-        @Bindable var viewModel = searchResultsViewModel
-        @Bindable var location = locationManager
+        @Bindable var mapStore = mapStore
+        @Bindable var searchStore = searchStore
+        @Bindable var directionsStore = directionsStore
 
         ZStack {
             Map(
-                position: $location.position,
+                position: $mapStore.position,
                 interactionModes: .all,
-                selection: $viewModel.selectedMapItem,
+                selection: placeStore.selectionBinding,
                 scope: mapScope
             ) {
 
-                ForEach(viewModel.searchResults, id: \.id) { mapItem in
-
+                ForEach(searchStore.searchResults, id: \.id) { mapItem in
                     Annotation(
                         mapItem.title ?? "",
                         coordinate: mapItem.coordinate
                     ) {
-                        MarkerImageView(viewModel: searchResultsViewModel, mapItem: mapItem)
+                        MarkerImageView(mapItem: mapItem)
+                            .environment(placeStore)
+                            .environment(directionsStore)
                     }
                     .tag(mapItem)
                 }
 
                 UserAnnotation()
 
-                ForEach(viewModel.routes, id: \.self) { element in
-
+                ForEach(directionsStore.routes, id: \.self) { element in
                     MapPolyline(element.polyline)
                         .stroke(
                             Gradient(colors: [.red, .indigo]),
@@ -85,50 +70,26 @@ struct MapDetail: View {
                 MapCompass()
             }
             .onMapCameraChange { context in
-                currentPitch = context.camera.pitch
-                currentDistance = context.camera.distance
-                locationManager.visibleRegion = context.region
-            }
-            .onChange(of: viewModel.selectedMapItem) { _, selectedMapItem in
-                guard let selectedMapItem else {
-                    viewModel.selectItem(nil)
-                    return
-                }
-
-                viewModel.selectItem(selectedMapItem)
-
-                let mapCamera = createCamera(
-                    with: selectedMapItem.coordinate,
-                    pitch: currentPitch,
-                    distance: currentDistance
+                mapStore.updateVisibleRegion(
+                    context.region,
+                    pitch: context.camera.pitch,
+                    distance: context.camera.distance
                 )
-
-                withAnimation {
-                    location.position = .camera(mapCamera)
-                } completion: {
-                    viewModel.resetDirections()
-                    viewModel.loadScene(for: selectedMapItem)
-                }
             }
             .toolbar {
-                MapToolbarControls(mapStyle: $mapStyle, mapScope: mapScope)
+                MapToolbarControls(mapStyle: $mapStore.mapStyle, mapScope: mapScope)
             }
             .overlay(alignment: .topTrailing) {
-                if viewModel.routes.first != nil {
+                if directionsStore.routes.first != nil {
                     DirectionControlsView()
                 }
             }
-            .mapStyle(mapStyle)
+            .mapStyle(mapStore.mapStyle)
         }
         .mapScope(mapScope)
     }
 }
 
 #Preview {
-    let locationManager = LocationManager()
-    let viewModel = SearchResultsViewModel(locationManager: locationManager)
-
-    MapDetail()
-        .environment(locationManager)
-        .environment(viewModel)
+    AppDependencies.make().installEnvironments(on: MapDetail())
 }

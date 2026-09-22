@@ -10,15 +10,16 @@ import MapKit
 
 struct MarkerImageView: View {
 
-    var viewModel: SearchResultsViewModel
+    @Environment(PlaceStore.self) private var placeStore
+    @Environment(DirectionsStore.self) private var directionsStore
     let mapItem: PlaceAnnotation
 
     private var isSelected: Bool {
-        viewModel.selectedMapItem?.id == mapItem.id
+        placeStore.selectedPlace?.id == mapItem.id
     }
 
     private var showPopover: Bool {
-        viewModel.markerPresentation == .lookAround && isSelected
+        placeStore.markerPresentation == .lookAround && isSelected
     }
 
     private var scaleEffect: CGFloat {
@@ -52,11 +53,13 @@ struct MarkerImageView: View {
             .padding(12)
             .onTapGesture {
                 if isSelected {
-                    viewModel.markerPresentation = .lookAround
+                    placeStore.showLookAround()
                 }
             }
             .popover(isPresented: popoverBinding) {
-                MarkerPopoverView(viewModel: viewModel)
+                MarkerPopoverView()
+                    .environment(placeStore)
+                    .environment(directionsStore)
             }
             .animation(.spring(duration: 0.5, bounce: 0.75), value: showPopover)
     }
@@ -66,7 +69,7 @@ struct MarkerImageView: View {
             get: { showPopover },
             set: { isPresented in
                 if !isPresented {
-                    viewModel.dismissMarkerPopover()
+                    placeStore.dismissMarkerPopover()
                 }
             }
         )

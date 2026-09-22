@@ -10,19 +10,11 @@ import SwiftUI
 @main
 struct MapMacosApp: App {
 
-    let locationManager: LocationManager
-    let searchResultsViewModel: SearchResultsViewModel
-
-    init() {
-        locationManager = LocationManager()
-        searchResultsViewModel = SearchResultsViewModel(locationManager: locationManager)
-    }
+    private let dependencies = AppDependencies.make()
 
     var body: some Scene {
         WindowGroup {
-            HomeScreen()
+            dependencies.installEnvironments(on: HomeScreen())
         }
-        .environment(locationManager)
-        .environment(searchResultsViewModel)
     }
 }

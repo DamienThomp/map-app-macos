@@ -51,13 +51,13 @@ enum TransportOptions: String, CaseIterable {
 
 struct DirectionControlsView: View {
 
-    @Environment(SearchResultsViewModel.self) private var viewModel
+    @Environment(DirectionsStore.self) private var directionsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
 
             Button {
-                viewModel.dismissDirections()
+                directionsStore.dismissDirections()
             } label: {
                 SymbolHelper.xmarkCircleFill.image
                     .imageScale(.small)
@@ -65,7 +65,7 @@ struct DirectionControlsView: View {
             .buttonStyle(.plain)
             .accessibilityLabel("Dismiss directions")
 
-            if case .failed(let message) = viewModel.directionsState {
+            if case .failed(let message) = directionsStore.directionsState {
                 Text(message)
                     .font(.caption)
                     .foregroundStyle(.red)
@@ -74,12 +74,14 @@ struct DirectionControlsView: View {
             HStack {
                 ForEach(TransportOptions.allCases, id: \.self) { option in
                     Button {
-                        viewModel.setTransportType(option.optionType)
+                        directionsStore.setTransportType(option.optionType)
                     } label: {
                         option.icon
-                            .foregroundStyle(viewModel.transportType == option.optionType ? .white : .secondary)
+                            .foregroundStyle(
+                                directionsStore.transportType == option.optionType ? .white : .secondary
+                            )
                     }
-                    .background(viewModel.transportType == option.optionType ? .blue : .clear)
+                    .background(directionsStore.transportType == option.optionType ? .blue : .clear)
                     .buttonStyle(.bordered)
                     .clipShape(RoundedRectangle(cornerRadius: 6))
                     .accessibilityLabel(option.accessibilityLabel)
@@ -94,9 +96,5 @@ struct DirectionControlsView: View {
 }
 
 #Preview {
-
-    let locationManager = LocationManager()
-    let viewModel = SearchResultsViewModel(locationManager: locationManager)
-
-    DirectionControlsView().environment(viewModel)
+    AppDependencies.make().installEnvironments(on: DirectionControlsView())
 }

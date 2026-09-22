@@ -2,13 +2,11 @@
 //  LocationManager.swift
 //  map-app-macos
 //
-//  Created by Damien L Thompson on 2024-07-22.
+//  Created by Damien L Thompson on 2026-09-22.
 //
 
-import SwiftUI
 import CoreLocation
 import Observation
-import MapKit
 
 @MainActor
 @Observable
@@ -19,10 +17,10 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
     private nonisolated(unsafe) var locationUpdatesTask: Task<Void, Never>?
 
     var location: CLLocation?
-    var position: MapCameraPosition = .userLocation(fallback: .automatic)
-    var region: MKCoordinateRegion = MKCoordinateRegion()
-    var visibleRegion: MKCoordinateRegion = MKCoordinateRegion()
     var authorizationStatus: CLAuthorizationStatus = .notDetermined
+
+    @ObservationIgnored
+    weak var userLocationObserver: (any UserLocationObserving)?
 
     override init() {
         super.init()
@@ -67,12 +65,7 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
                     guard let currentLocation = update.location else { continue }
 
                     location = currentLocation
-                    region = MKCoordinateRegion(
-                        center: currentLocation.coordinate,
-                        latitudinalMeters: 500,
-                        longitudinalMeters: 500
-                    )
-                    position = .region(region)
+                    userLocationObserver?.userLocationDidUpdate(currentLocation)
                 }
             } catch is CancellationError {
                 return

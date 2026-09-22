@@ -8,15 +8,14 @@
 import Foundation
 import SwiftUI
 import MapKit
-import Contacts
 
-class PlaceAnnotation: NSObject, MKAnnotation, Identifiable {
-    
-    let id = UUID()
+struct PlaceAnnotation: Identifiable, Hashable {
 
-    private var mapItem: MKMapItem
+    let id: UUID
+    let mapItem: MKMapItem
 
     init(mapItem: MKMapItem) {
+        self.id = UUID()
         self.mapItem = mapItem
     }
 
@@ -25,23 +24,24 @@ class PlaceAnnotation: NSObject, MKAnnotation, Identifiable {
     }
 
     var address: String {
-        guard let postalAddress = mapItem.placemark.postalAddress else {
-            return ""
+        if #available(macOS 26.0, iOS 18.0, *) {
+            return mapItem.address?.fullAddress ?? ""
         }
-
-        return "\(postalAddress.street), \(postalAddress.city), \(postalAddress.state), \(postalAddress.postalCode)"
+        return mapItem.placemark.title ?? ""
     }
 
     var location: CLLocation? {
-        CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        if #available(macOS 26.0, iOS 18.0, *) {
+            return mapItem.location
+        }
+        return mapItem.placemark.location
     }
 
     var coordinate: CLLocationCoordinate2D {
-        mapItem.placemark.coordinate
-    }
-
-    var placeMark: MKPlacemark {
-        mapItem.placemark
+        if #available(macOS 26.0, iOS 18.0, *) {
+            return mapItem.location.coordinate
+        }
+        return mapItem.placemark.coordinate
     }
 
     var url: URL? {
@@ -53,31 +53,31 @@ class PlaceAnnotation: NSObject, MKAnnotation, Identifiable {
     }
 
     var pointOfInterestCategory: MKPointOfInterestCategory? {
-
-        guard let category = mapItem.pointOfInterestCategory else { return nil }
-
-        return category
+        mapItem.pointOfInterestCategory
     }
 
     var pointOfInterestIcon: String {
-
-        let (icon, _ ) = AnnotationHelper.getIconforAnotation(pointOfInterestCategory)
-
+        let (icon, _) = AnnotationHelper.getIconForAnnotation(pointOfInterestCategory)
         return icon
     }
 
     var pointOfInterestColor: Color {
-        
-        let (_, color) = AnnotationHelper.getIconforAnotation(pointOfInterestCategory)
-
+        let (_, color) = AnnotationHelper.getIconForAnnotation(pointOfInterestCategory)
         return color
     }
 
     func getDistance(userLocation: CLLocation?) -> Measurement<UnitLength>? {
-
-        guard let placeLocation = mapItem.placemark.location,
-              let userLocation = userLocation else { return nil }
+        guard let placeLocation = location,
+              let userLocation else { return nil }
 
         return Measurement(value: userLocation.distance(from: placeLocation), unit: .meters)
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    static func == (lhs: PlaceAnnotation, rhs: PlaceAnnotation) -> Bool {
+        lhs.id == rhs.id
     }
 }

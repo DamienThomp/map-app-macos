@@ -15,7 +15,7 @@ import MapKit
 final class LocationManager: NSObject, CLLocationManagerDelegate {
 
     private let manager = CLLocationManager()
-    private nonisolated(unsafe) var locationUpdatesTask: Task<Void, Never>?
+    private nonisolated var locationUpdatesTask: Task<Void, Never>?
 
     var location: CLLocation?
     var position: MapCameraPosition = .userLocation(fallback: .automatic)

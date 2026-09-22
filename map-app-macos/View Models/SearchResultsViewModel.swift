@@ -86,14 +86,13 @@ final class SearchResultsViewModel {
         guard let selectedMapItem,
               let location = locationManager.location else { return }
 
-        let startPoint = CLLocationCoordinate2D(
-            latitude: location.coordinate.latitude,
-            longitude: location.coordinate.longitude
-        )
-
         let request = MKDirections.Request()
-        request.source = MKMapItem(placemark: MKPlacemark(coordinate: startPoint))
-        request.destination = MKMapItem(placemark: selectedMapItem.placeMark)
+        if #available(macOS 26.0, iOS 18.0, *) {
+            request.source = MKMapItem(location: location, address: nil)
+        } else {
+            request.source = MKMapItem(placemark: MKPlacemark(coordinate: location.coordinate))
+        }
+        request.destination = selectedMapItem.mapItem
         request.transportType = transportType
 
         if transportType == .walking {

@@ -24,6 +24,8 @@
 		38B005192D0E186D00976DD7 /* DirectionControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B005182D0E186D00976DD7 /* DirectionControlsView.swift */; };
 		38C92F542D1349E0001BDE5F /* SFSymbolsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C92F532D1349E0001BDE5F /* SFSymbolsHelper.swift */; };
 		38C92F572D134AF8001BDE5F /* SFSymbolsMacro in Frameworks */ = {isa = PBXBuildFile; productRef = 38C92F562D134AF8001BDE5F /* SFSymbolsMacro */; };
+		38P4A0012E80000100000001 /* LoadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38P4A0022E80000100000001 /* LoadState.swift */; };
+		38P4A0032E80000100000001 /* MapToolbarControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38P4A0042E80000100000001 /* MapToolbarControls.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,8 @@
 		3845A0202C6EFD8F00898F4E /* AnnotationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationHelper.swift; sourceTree = "<group>"; };
 		38B005182D0E186D00976DD7 /* DirectionControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionControlsView.swift; sourceTree = "<group>"; };
 		38C92F532D1349E0001BDE5F /* SFSymbolsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbolsHelper.swift; sourceTree = "<group>"; };
+		38P4A0022E80000100000001 /* LoadState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadState.swift; sourceTree = "<group>"; };
+		38P4A0042E80000100000001 /* MapToolbarControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapToolbarControls.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				3845A0222C6F03DF00898F4E /* Utils */,
+				38P4A0052E80000100000001 /* Models */,
 				38257EEB2C4ED2F500D3256F /* Annotations */,
 				38257EE82C4ECB1D00D3256F /* View Models */,
 				38257EE32C4EBC4400D3256F /* Managers */,
@@ -113,6 +118,7 @@
 			children = (
 				38257EDF2C4EB94100D3256F /* SideBar.swift */,
 				38257EE12C4EB95200D3256F /* MapDetail.swift */,
+				38P4A0042E80000100000001 /* MapToolbarControls.swift */,
 				38257EE62C4EC97500D3256F /* SearchResultsList.swift */,
 				38433C302C585843009EE906 /* SearchListCellView.swift */,
 				38433C2C2C582DD0009EE906 /* MarkerPopoverView.swift */,
@@ -155,6 +161,14 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		38P4A0052E80000100000001 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				38P4A0022E80000100000001 /* LoadState.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -184,7 +198,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					38257EC82C4EB84B00D3256F = {
 						CreatedOnToolsVersion = 15.4;
@@ -263,6 +277,8 @@
 				38257EE02C4EB94100D3256F /* SideBar.swift in Sources */,
 				38257EDD2C4EB89B00D3256F /* HomeScreen.swift in Sources */,
 				38257EE22C4EB95200D3256F /* MapDetail.swift in Sources */,
+				38P4A0012E80000100000001 /* LoadState.swift in Sources */,
+				38P4A0032E80000100000001 /* MapToolbarControls.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +321,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = MMXH24PBRA;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -328,6 +345,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -369,6 +387,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = MMXH24PBRA;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -385,6 +404,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = Release;
@@ -401,7 +421,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"map-app-macos/Preview Content\"";
-				DEVELOPMENT_TEAM = MMXH24PBRA;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -441,7 +460,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"map-app-macos/Preview Content\"";
-				DEVELOPMENT_TEAM = MMXH24PBRA;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;

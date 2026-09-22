@@ -36,28 +36,45 @@ enum TransportOptions: String, CaseIterable {
             SymbolHelper.busFill.image
         }
     }
+
+    var accessibilityLabel: String {
+        switch self {
+        case .automobile:
+            "Driving"
+        case .walking:
+            "Walking"
+        case .transit:
+            "Transit"
+        }
+    }
 }
 
 struct DirectionControlsView: View {
-    
+
     @Environment(SearchResultsViewModel.self) private var viewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
 
             Button {
-                viewModel.showingDirections = false
-                viewModel.routes = []
-            }
-            label: {
+                viewModel.dismissDirections()
+            } label: {
                 SymbolHelper.xmarkCircleFill.image
                     .imageScale(.small)
-            }.buttonStyle(.plain)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Dismiss directions")
+
+            if case .failed(let message) = viewModel.directionsState {
+                Text(message)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            }
 
             HStack {
                 ForEach(TransportOptions.allCases, id: \.self) { option in
                     Button {
-                        viewModel.transportType = option.optionType
+                        viewModel.setTransportType(option.optionType)
                     } label: {
                         option.icon
                             .foregroundStyle(viewModel.transportType == option.optionType ? .white : .secondary)
@@ -65,6 +82,7 @@ struct DirectionControlsView: View {
                     .background(viewModel.transportType == option.optionType ? .blue : .clear)
                     .buttonStyle(.bordered)
                     .clipShape(RoundedRectangle(cornerRadius: 6))
+                    .accessibilityLabel(option.accessibilityLabel)
                 }
             }
         }
@@ -76,7 +94,7 @@ struct DirectionControlsView: View {
 }
 
 #Preview {
-    
+
     let locationManager = LocationManager()
     let viewModel = SearchResultsViewModel(locationManager: locationManager)
 

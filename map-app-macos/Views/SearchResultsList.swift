@@ -6,21 +6,21 @@
 //
 
 import SwiftUI
-import MapKit
 
 struct SearchResultsList: View {
 
     @Environment(LocationManager.self) private var locationManager
-    @Environment(SearchResultsViewModel.self) private var searchResultsViewModel
+    @Environment(SearchStore.self) private var searchStore
+    @Environment(PlaceStore.self) private var placeStore
 
     var body: some View {
 
-        @Bindable var viewModel = searchResultsViewModel
+        @Bindable var searchStore = searchStore
 
-        List(selection: $viewModel.selectedMapItem) {
-            if !viewModel.searchResults.isEmpty {
+        List(selection: placeStore.selectionBinding) {
+            if !searchStore.searchResults.isEmpty {
                 Section("Locations") {
-                    ForEach(viewModel.searchResults, id: \.id) { item in
+                    ForEach(searchStore.searchResults, id: \.id) { item in
                         SearchListCellView(
                             mapItem: item,
                             userLocation: locationManager.location
@@ -35,7 +35,5 @@ struct SearchResultsList: View {
 }
 
 #Preview {
-    SearchResultsList()
-        .environment(LocationManager())
-        .environment(SearchResultsViewModel(locationManager: LocationManager()))
+    AppDependencies.make().installEnvironments(on: SearchResultsList())
 }

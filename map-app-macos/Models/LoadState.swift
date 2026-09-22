@@ -2,6 +2,8 @@
 //  LoadState.swift
 //  map-app-macos
 //
+//  Created by Damien L Thompson on 2026-09-22.
+//
 
 import Foundation
 

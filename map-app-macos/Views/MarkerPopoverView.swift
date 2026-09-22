@@ -10,14 +10,15 @@ import MapKit
 
 struct MarkerPopoverView: View {
 
-    var viewModel: SearchResultsViewModel
+    @Environment(PlaceStore.self) private var placeStore
+    @Environment(DirectionsStore.self) private var directionsStore
 
     private var url: URL? {
-        viewModel.selectedMapItem?.url
+        placeStore.selectedPlace?.url
     }
 
     private var phoneNumber: URL? {
-        guard let phoneNumber = viewModel.selectedMapItem?.phoneNumber else { return nil }
+        guard let phoneNumber = placeStore.selectedPlace?.phoneNumber else { return nil }
 
         let formattedNumber = phoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
 
@@ -31,7 +32,7 @@ struct MarkerPopoverView: View {
 
                 HStack(spacing: 10) {
 
-                    Text(viewModel.selectedMapItem?.title ?? "").font(.title2)
+                    Text(placeStore.selectedPlace?.title ?? "").font(.title2)
 
                     if let phoneNumber {
                         Link(destination: phoneNumber) {
@@ -53,7 +54,7 @@ struct MarkerPopoverView: View {
                 }.font(.caption)
 
                 Button {
-                    viewModel.requestDirections()
+                    directionsStore.requestDirections()
                 } label: {
                     HStack {
                         Text("Get Directions")
@@ -63,12 +64,12 @@ struct MarkerPopoverView: View {
                 .buttonStyle(.borderedProminent)
             }
 
-            if let sceneErrorMessage = viewModel.sceneErrorMessage {
+            if let sceneErrorMessage = placeStore.sceneErrorMessage {
                 Text(sceneErrorMessage)
                     .font(.caption)
                     .foregroundStyle(.red)
             } else {
-                LookAroundPreview(initialScene: viewModel.scene)
+                LookAroundPreview(initialScene: placeStore.lookAroundScene)
                     .frame(height: 150)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
@@ -79,9 +80,5 @@ struct MarkerPopoverView: View {
 }
 
 #Preview(traits: .fixedLayout(width: 200, height: 300)) {
-
-    let locationManager = LocationManager()
-    let viewModel = SearchResultsViewModel(locationManager: locationManager)
-
-    MarkerPopoverView(viewModel: viewModel)
+    AppDependencies.make().installEnvironments(on: MarkerPopoverView())
 }

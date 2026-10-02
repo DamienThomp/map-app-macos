@@ -35,6 +35,11 @@ final class MapStore: UserLocationObserving {
     }
 
     func focus(on coordinate: CLLocationCoordinate2D, completion: (() -> Void)? = nil) {
+        if isCoordinateNearCenter(coordinate) {
+            completion?()
+            return
+        }
+
         let mapCamera = MapCamera(
             centerCoordinate: coordinate,
             distance: currentDistance,
@@ -46,5 +51,18 @@ final class MapStore: UserLocationObserving {
         } completion: {
             completion?()
         }
+    }
+
+    private func isCoordinateNearCenter(_ coordinate: CLLocationCoordinate2D) -> Bool {
+        let region = visibleRegion
+        guard region.span.latitudeDelta > 0, region.span.longitudeDelta > 0 else {
+            return false
+        }
+
+        let latThreshold = region.span.latitudeDelta * 0.05
+        let lonThreshold = region.span.longitudeDelta * 0.05
+
+        return abs(coordinate.latitude - region.center.latitude) < latThreshold
+            && abs(coordinate.longitude - region.center.longitude) < lonThreshold
     }
 }

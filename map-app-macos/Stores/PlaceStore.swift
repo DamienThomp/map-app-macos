@@ -16,7 +16,7 @@ final class PlaceStore: PlaceSelecting, PlaceProviding {
 
     var selectedPlace: PlaceAnnotation?
     var lookAroundScene: MKLookAroundScene?
-    var markerPresentation: MarkerPresentation = .none
+    var isPopoverPresented = false
     var sceneErrorMessage: String?
 
     @ObservationIgnored
@@ -45,7 +45,7 @@ final class PlaceStore: PlaceSelecting, PlaceProviding {
         sceneTask?.cancel()
         selectedPlace = nil
         lookAroundScene = nil
-        markerPresentation = .none
+        isPopoverPresented = false
         sceneErrorMessage = nil
     }
 
@@ -55,22 +55,38 @@ final class PlaceStore: PlaceSelecting, PlaceProviding {
             return
         }
 
-        let isNewSelection = selectedPlace?.id != place.id
+        guard selectedPlace?.id != place.id else { return }
 
-        if isNewSelection {
-            lookAroundScene = nil
-            sceneTask?.cancel()
-            sceneErrorMessage = nil
-        }
+        select(place)
+    }
 
+    func select(_ place: PlaceAnnotation) {
+        sceneTask?.cancel()
+        lookAroundScene = nil
+        sceneErrorMessage = nil
         selectedPlace = place
-        markerPresentation = .none
+        isPopoverPresented = false
 
         directionsResetting?.resetDirections()
 
         mapStore.focus(on: place.coordinate) {
+            guard self.selectedPlace?.id == place.id else { return }
+            self.isPopoverPresented = true
             self.loadLookAround(for: place)
         }
+    }
+
+    func presentPopover() {
+        guard selectedPlace != nil else { return }
+        isPopoverPresented = true
+    }
+
+    func dismissPopover() {
+        isPopoverPresented = false
+    }
+
+    func hidePopoverForDirections() {
+        isPopoverPresented = false
     }
 
     func loadLookAround(for place: PlaceAnnotation) {
@@ -81,30 +97,13 @@ final class PlaceStore: PlaceSelecting, PlaceProviding {
                 try await fetchScene(for: place)
                 try Task.checkCancellation()
                 guard selectedPlace?.id == place.id else { return }
-                markerPresentation = .lookAround
             } catch is CancellationError {
                 return
             } catch {
                 guard selectedPlace?.id == place.id else { return }
                 sceneErrorMessage = error.localizedDescription
-                markerPresentation = .none
             }
         }
-    }
-
-    func showLookAround() {
-        guard selectedPlace != nil else { return }
-        markerPresentation = .lookAround
-    }
-
-    func dismissMarkerPopover() {
-        if markerPresentation == .lookAround {
-            markerPresentation = .none
-        }
-    }
-
-    func setMarkerPresentation(_ presentation: MarkerPresentation) {
-        markerPresentation = presentation
     }
 
     private func fetchScene(for place: PlaceAnnotation) async throws {

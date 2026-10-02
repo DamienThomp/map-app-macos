@@ -28,7 +28,7 @@ final class DirectionsStore: DirectionsResetting {
     }
 
     func requestDirections() {
-        placeProvider.setMarkerPresentation(.directions)
+        placeProvider.hidePopoverForDirections()
         directionsTask?.cancel()
         directionsTask = Task {
             directionsState = .loading
@@ -41,7 +41,7 @@ final class DirectionsStore: DirectionsResetting {
             } catch {
                 directionsState = .failed(error.localizedDescription)
                 if placeProvider.lookAroundScene != nil {
-                    placeProvider.setMarkerPresentation(.lookAround)
+                    placeProvider.presentPopover()
                 }
             }
         }
@@ -60,9 +60,7 @@ final class DirectionsStore: DirectionsResetting {
         transportType = .automobile
         directionsState = .idle
         if placeProvider.selectedPlace != nil {
-            placeProvider.setMarkerPresentation(.lookAround)
-        } else {
-            placeProvider.setMarkerPresentation(.none)
+            placeProvider.presentPopover()
         }
     }
 

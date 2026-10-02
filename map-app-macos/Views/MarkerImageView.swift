@@ -19,19 +19,11 @@ struct MarkerImageView: View {
     }
 
     private var showPopover: Bool {
-        placeStore.markerPresentation == .lookAround && isSelected
+        isSelected && placeStore.isPopoverPresented
     }
 
     private var scaleEffect: CGFloat {
-        if showPopover {
-            return 1.8
-        }
-
-        if isSelected {
-            return 1.5
-        }
-
-        return 1.0
+        showPopover ? 1.8 : 1.0
     }
 
     var body: some View {
@@ -50,10 +42,13 @@ struct MarkerImageView: View {
                     .stroke(Gradient(colors: [mapItem.pointOfInterestColor, .black]), lineWidth: 2)
                     .scaleEffect(scaleEffect)
             )
-            .padding(12)
+            .frame(width: 44, height: 44)
+            .contentShape(Rectangle())
             .onTapGesture {
                 if isSelected {
-                    placeStore.showLookAround()
+                    placeStore.presentPopover()
+                } else {
+                    placeStore.select(mapItem)
                 }
             }
             .popover(isPresented: popoverBinding) {
@@ -69,7 +64,7 @@ struct MarkerImageView: View {
             get: { showPopover },
             set: { isPresented in
                 if !isPresented {
-                    placeStore.dismissMarkerPopover()
+                    placeStore.dismissPopover()
                 }
             }
         )

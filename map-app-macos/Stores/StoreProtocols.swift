@@ -28,5 +28,6 @@ protocol UserLocationObserving: AnyObject {
 protocol PlaceProviding: AnyObject {
     var selectedPlace: PlaceAnnotation? { get }
     var lookAroundScene: MKLookAroundScene? { get }
-    func setMarkerPresentation(_ presentation: MarkerPresentation)
+    func hidePopoverForDirections()
+    func presentPopover()
 }

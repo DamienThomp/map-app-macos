@@ -13,9 +13,3 @@ enum LoadState<T> {
     case loaded(T)
     case failed(String)
 }
-
-enum MarkerPresentation: Equatable {
-    case none
-    case lookAround
-    case directions
-}
